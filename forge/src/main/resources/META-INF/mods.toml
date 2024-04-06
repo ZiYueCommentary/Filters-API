@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "[36,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "filters"
+version = "${version}"
+displayName = "Filters API"
+authors = "ZiYueCommentary"
+description = '''
+Adding filters to creative tab inventory.
+'''
+logoFile = "logo.png"
+
+[[dependencies.filters]]
+modId = "forge"
+mandatory = true
+versionRange = "[36,)"
+ordering = "NONE"
+side = "CLIENT"
+
+[[dependencies.filters]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.5,)"
+ordering = "NONE"
+side = "CLIENT"

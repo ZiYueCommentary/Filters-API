@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "filters",
+  "version": "${version}",
+  "name": "Filters API",
+  "description": "Adding filters to creative tab inventory.",
+  "authors": [
+    "ZiYueCommentary"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/project/filters-api",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ziyue.filters.fabric.FiltersAPIFabric"
+    ]
+  },
+  "mixins": [
+    "filters.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.16.5"
+  }
+}

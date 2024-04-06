@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "ziyue.filters.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "client": [
+    "CreativeModeInventoryScreenMixin",
+    "EffectRenderingInventoryScreenMixin",
+    "FinishInitializationMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
