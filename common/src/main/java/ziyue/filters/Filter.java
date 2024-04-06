@@ -45,6 +45,9 @@ import static ziyue.filters.FiltersAPI.ICONS;
 @Environment(EnvType.CLIENT)
 public class Filter extends Button
 {
+    /**
+     * The hashmap which stores all filters.
+     */
     public static final HashMap<Integer, FilterList> FILTERS = new HashMap<>();
 
     protected static final ResourceLocation TABS = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
@@ -101,10 +104,26 @@ public class Filter extends Button
         tesselator.end();
     }
 
-    public static void setOptionsButton(CreativeModeTab tab, Component tooltip, Button.OnPress onPress){
+    /**
+     * @see #setOptionsButton(CreativeModeTab, Component, OnPress, ResourceLocation, int, int)
+     * @since 1.0.0
+     */
+    public static void setOptionsButton(CreativeModeTab tab, Component tooltip, Button.OnPress onPress) {
         Filter.setOptionsButton(tab, tooltip, onPress, ICONS, 64, 0);
     }
 
+    /**
+     * Configuring the third button on the left.
+     *
+     * @param tab     specific creative mode tab
+     * @param tooltip text when hovering the button
+     * @param onPress function when clicking the button, set this as null to make the button invisible
+     * @param icon    the icon of the button
+     * @param iconU   iconU
+     * @param iconV   iconV
+     * @author ZiYueCommentary
+     * @since 1.0.0
+     */
     public static void setOptionsButton(CreativeModeTab tab, Component tooltip, Button.OnPress onPress, ResourceLocation icon, int iconU, int iconV) {
         FilterList filters = Filter.FILTERS.get(tab.getId());
         filters.btnOptionsTooltip = tooltip;
@@ -183,7 +202,7 @@ public class Filter extends Button
      * @see #isItemCategorized(int, Item)
      * @since 1.0.0
      */
-    public static boolean isItemCategorized(CreativeModeTab tab, Item item){
+    public static boolean isItemCategorized(CreativeModeTab tab, Item item) {
         return isItemCategorized(tab.getId(), item);
     }
 
@@ -203,7 +222,7 @@ public class Filter extends Button
      * @see #isTabHasFilters(int)
      * @since 1.0.0
      */
-    public static boolean isTabHasFilters(CreativeModeTab tab){
+    public static boolean isTabHasFilters(CreativeModeTab tab) {
         return isTabHasFilters(tab.getId());
     }
 }

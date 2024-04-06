@@ -83,6 +83,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
         if (filter.btnDisableAll.isHovered()) renderTooltip(poseStack, filter.btnDisableAll.getMessage(), i, j);
         if (filter.btnOptions != null && filter.btnOptions.isHovered() && filter.btnOptionsTooltip != null)
             renderTooltip(poseStack, filter.btnOptionsTooltip, i, j);
+
         filter.forEach(filter1 -> {
             if (filter1.isHovered()) renderTooltip(poseStack, filter1.getMessage(), i, j);
         });

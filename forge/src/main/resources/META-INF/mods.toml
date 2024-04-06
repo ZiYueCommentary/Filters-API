@@ -1,15 +1,16 @@
 modLoader = "javafml"
 loaderVersion = "[36,)"
-#issueTrackerURL = ""
+issueTrackerURL = "https://github.com/ZiYueCommentary/Filters-API/issues"
 license = "MIT"
 
 [[mods]]
 modId = "filters"
 version = "${version}"
 displayName = "Filters API"
+displayURL="https://modrinth.com/project/filters-api"
 authors = "ZiYueCommentary"
 description = '''
-Adding filters to creative tab inventory.
+A library that provides a filtering system to categorize your mod's creative tab.
 '''
 logoFile = "logo.png"
 

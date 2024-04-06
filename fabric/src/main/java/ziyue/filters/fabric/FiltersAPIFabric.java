@@ -1,11 +1,13 @@
 package ziyue.filters.fabric;
 
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import ziyue.filters.FiltersAPI;
 
-public class FiltersAPIFabric implements ModInitializer {
+public class FiltersAPIFabric implements ClientModInitializer
+{
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {
         FiltersAPI.LOGGER.info("Hello World!");
     }
 }

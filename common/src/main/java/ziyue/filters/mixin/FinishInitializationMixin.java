@@ -14,7 +14,7 @@ import ziyue.filters.FiltersAPI;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Count uncategorized items.
+ * Collect uncategorized items.
  *
  * @author ZiYueCommentary
  * @see RenderSystem
@@ -33,9 +33,9 @@ public abstract class FinishInitializationMixin
         Registry.ITEM.forEach(item -> {
             CreativeModeTab itemCategory = item.getItemCategory();
             if (itemCategory != null) {
-                if (Filter.isTabHasFilters(itemCategory.getId())) {
+                if (Filter.isTabHasFilters(itemCategory)) {
                     FilterList filters = Filter.FILTERS.get(itemCategory.getId());
-                    if ((filters.uncategorizedItems != null) && (!Filter.isItemCategorized(itemCategory.getId(), item))) {
+                    if ((filters.uncategorizedItems != null) && (!Filter.isItemCategorized(itemCategory, item))) {
                         filters.uncategorizedItems.addItems(item);
                         uncategorizedItems.getAndIncrement();
                     }

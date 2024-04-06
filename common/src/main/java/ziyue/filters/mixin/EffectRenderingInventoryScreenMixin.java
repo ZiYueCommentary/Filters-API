@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ziyue.filters.Filter;
 
 /**
- * Change effect labels' position in "creative mode tab with filters".
+ * Change effect labels' position in creative mode tab with filters.
  *
  * @author ZiYueCommentary
  * @see Filter

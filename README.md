@@ -1,4 +1,4 @@
-<img src="showcase.png" width="500px" alt="showcase">
+<div align="center"><img src="showcase.png" width="500px" alt="showcase"></div>
 
 # Filters API
 
