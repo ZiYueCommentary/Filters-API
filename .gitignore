@@ -17,3 +17,6 @@ classes/
 .vscode
 .settings
 *.launch
+
+**/lang/*.json
+!en_us.json
