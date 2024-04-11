@@ -10,7 +10,7 @@ displayName = "Filters API"
 displayURL="https://modrinth.com/project/filters-api"
 authors = "ZiYueCommentary"
 description = '''
-A library that provides a filtering system to categorize your mod's creative tab.
+Provides a filtering system to creative mode tabs.
 '''
 logoFile = "logo.png"
 

@@ -3,7 +3,7 @@
 	"id": "filters",
 	"version": "${version}",
 	"name": "Filters API",
-	"description": "A library that provides a filtering system to categorize your mod's creative tab.",
+	"description": "Provides a filtering system to creative mode tabs.",
 	"authors": [ "ZiYueCommentary" ],
 	"contact": {
 		"homepage": "https://modrinth.com/project/filters-api",

@@ -1,8 +1,7 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.0-SNAPSHOT" apply false
     id "de.undercouch.download" version "4.1.2"
-    id "com.github.johnrengelman.shadow" version "7.1.0" apply false
-    id "dev.architectury.loom" version "1.5-SNAPSHOT" apply false
 }
 
 architectury {
@@ -14,6 +13,10 @@ subprojects {
 
     loom {
         silentMojangMappingsLicense()
+
+        mixin {
+            defaultRefmapName.set("filters-refmap.json")
+        }
     }
 
     dependencies {
@@ -22,15 +25,33 @@ subprojects {
     }
 }
 
+tasks.register('setupFiles') {
+    return
+    download {
+        src "https://weblate.ziyuesinicization.site/api/components/filters-api/en_us-json/file/"
+        dest "lang.zip"
+        overwrite true
+        retries - 1
+    }
+    copy {
+        outputs.upToDateWhen { false }
+        from(zipTree("lang.zip"))
+        into "temp_lang"
+    }
+    copy {
+        outputs.upToDateWhen { false }
+        from "temp_lang/filters-api/en_us-json/"
+        into "/"
+    }
+    delete("lang.zip", "temp_lang")
+}
+
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
     apply plugin: "maven-publish"
 
-    base {
-        archivesName = rootProject.archives_base_name
-    }
-
+    archivesBaseName = rootProject.archives_base_name
     version = rootProject.mod_version
     group = rootProject.maven_group
 
@@ -51,22 +72,10 @@ allprojects {
     }
 
     afterEvaluate {
-        download {
-            src "https://weblate.ziyuesinicization.site/api/components/filters-api/en_us-json/file/"
-            dest "lang.zip"
-            overwrite true
-            retries - 1
+        for (def task in it.tasks) {
+            if (task != rootProject.tasks.setupFiles) {
+                task.dependsOn rootProject.tasks.setupFiles
+            }
         }
-        copy {
-            //outputs.upToDateWhen { false }
-            from(zipTree("lang.zip"))
-            into "temp_lang"
-        }
-        copy {
-            //outputs.upToDateWhen { false }
-            from "temp_lang/filters-api/en_us-json/"
-            into "/"
-        }
-        delete("lang.zip", "temp_lang")
     }
 }
