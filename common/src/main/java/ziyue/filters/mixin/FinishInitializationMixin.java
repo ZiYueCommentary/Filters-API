@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ziyue.filters.Filter;
 import ziyue.filters.FilterList;
-import ziyue.filters.FiltersAPI;
+import ziyue.filters.FiltersApi;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,9 +33,9 @@ public abstract class FinishInitializationMixin
         Registry.ITEM.forEach(item -> {
             CreativeModeTab itemCategory = item.getItemCategory();
             if (itemCategory != null) {
-                if (Filter.isTabHasFilters(itemCategory)) {
-                    FilterList filters = Filter.FILTERS.get(itemCategory.getId());
-                    if ((filters.uncategorizedItems != null) && (!Filter.isItemCategorized(itemCategory, item))) {
+                if (FiltersApi.isTabHasFilters(itemCategory)) {
+                    FilterList filters = FiltersApi.FILTERS.get(itemCategory.getId());
+                    if ((filters.uncategorizedItems != null) && (!FiltersApi.isItemCategorized(itemCategory, item))) {
                         filters.uncategorizedItems.addItems(item);
                         uncategorizedItems.getAndIncrement();
                     }
@@ -44,13 +44,13 @@ public abstract class FinishInitializationMixin
         });
 
         // adding uncategorized items filter to filter list
-        Filter.FILTERS.forEach((tabId, filterList) -> {
+        FiltersApi.FILTERS.forEach((tabId, filterList) -> {
             if ((filterList.uncategorizedItems != null) && (!filterList.uncategorizedItems.items.isEmpty())) {
                 filterList.add(filterList.uncategorizedItems);
                 uncategorizedFilters.getAndIncrement();
             }
         });
 
-        FiltersAPI.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
+        FiltersApi.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
     }
 }

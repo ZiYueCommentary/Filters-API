@@ -31,6 +31,13 @@ public class FilterList extends ArrayList<Filter>
     public int btnOptionsIconU = 0;
     public int btnOptionsIconV = 0;
 
+    /**
+     * Creating an empty filter.
+     *
+     * @return an empty filter
+     * @author ZiYueCommentary
+     * @since 1.0.0
+     */
     public static FilterList empty() {
         return new FilterList();
     }

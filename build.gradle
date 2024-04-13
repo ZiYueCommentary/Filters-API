@@ -26,7 +26,6 @@ subprojects {
 }
 
 tasks.register('setupFiles') {
-    return
     download {
         src "https://weblate.ziyuesinicization.site/api/components/filters-api/en_us-json/file/"
         dest "lang.zip"

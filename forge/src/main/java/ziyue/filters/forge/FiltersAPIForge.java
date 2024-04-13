@@ -1,12 +1,12 @@
 package ziyue.filters.forge;
 
 import net.minecraftforge.fml.common.Mod;
-import ziyue.filters.FiltersAPI;
+import ziyue.filters.FiltersApi;
 
-@Mod(FiltersAPI.MOD_ID)
+@Mod(FiltersApi.MOD_ID)
 public class FiltersAPIForge
 {
     public FiltersAPIForge() {
-        FiltersAPI.LOGGER.info("Hello World!");
+        FiltersApi.LOGGER.info("Hello World!");
     }
 }
