@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ziyue.filters.Filter;
-import ziyue.filters.FiltersApi;
+import ziyue.filters.FilterBuilder;
 
 /**
  * Change effect labels' position in creative mode tab with filters.
@@ -33,7 +33,7 @@ public abstract class EffectRenderingInventoryScreenMixin<T extends AbstractCont
     @Inject(at = @At("HEAD"), method = "renderEffects")
     private void beforeRenderEffects(PoseStack poseStack, CallbackInfo ci) {
         if (minecraft.screen instanceof CreativeModeInventoryScreen) {
-            if (FiltersApi.isTabHasFilters(((CreativeModeInventoryScreen) minecraft.screen).getSelectedTab())) {
+            if (FilterBuilder.isTabHasFilters(((CreativeModeInventoryScreen) minecraft.screen).getSelectedTab())) {
                 this.leftPos = this.leftPos - 55; // move effect labels to avoid overlap with filters
             }
         }
@@ -42,7 +42,7 @@ public abstract class EffectRenderingInventoryScreenMixin<T extends AbstractCont
     @Inject(at = @At("RETURN"), method = "renderEffects")
     private void afterRenderEffects(PoseStack poseStack, CallbackInfo ci) {
         if (minecraft.screen instanceof CreativeModeInventoryScreen) {
-            if (FiltersApi.isTabHasFilters(((CreativeModeInventoryScreen) minecraft.screen).getSelectedTab())) {
+            if (FilterBuilder.isTabHasFilters(((CreativeModeInventoryScreen) minecraft.screen).getSelectedTab())) {
                 this.leftPos = this.leftPos + 55;
             }
         }

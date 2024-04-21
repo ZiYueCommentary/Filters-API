@@ -1,3 +1,5 @@
+import java.security.cert.Certificate
+
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
@@ -37,7 +39,6 @@ shadowJar {
 }
 
 remapJar {
-    injectAccessWidener = true
     input.set shadowJar.archiveFile
     dependsOn shadowJar
     classifier null
@@ -61,14 +62,22 @@ components.java {
 
 publishing {
     publications {
-        mavenFabric(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
+        mavenCommon(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-fabric"
+            artifact(remapJar)
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
         }
     }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        // Add repositories to publish to here.
+        maven {
+            url = "https://dashboard.maven.ziyuesinicization.site/repository/maven-releases/"
+            credentials {
+                username = "ZiYueCommentary"
+                password = System.getenv("MAVEN_PASS")
+            }
+        }
     }
 }

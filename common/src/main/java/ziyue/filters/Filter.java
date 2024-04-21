@@ -7,12 +7,11 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.math.Matrix4f;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import ziyue.filters.mixin.CreativeModeInventoryScreenMixin;
@@ -22,25 +21,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static ziyue.filters.FiltersApi.TABS;
-
 /**
  * Filter for creative mode tab.
  * This filter support register for any creative mode tabs, including vanilla tabs.
  * The order of filters was depending on registering orders.
- * Inspired by <a href="https://github.com/MrCrayfish/Filters">Filters Mod</a> and <a href="https://github.com/MrCrayfish/MrCrayfishFurnitureMod">MrCrayfish's Furniture Mod</a>.
  *
  * @author ZiYueCommentary
  * @see CreativeModeInventoryScreenMixin
  * @see EffectRenderingInventoryScreenMixin
- * @see <a href="https://github.com/MrCrayfish/Filters">Filters Mod</a>
- * @see <a href="https://github.com/MrCrayfish/MrCrayfishFurnitureMod">MrCrayfish's Furniture Mod</a>
+ * @see FilterBuilder
  * @since 1.0.0
  */
 
-@Environment(EnvType.CLIENT)
 public class Filter extends Button
 {
+    public static final ResourceLocation CREATIVE_TABS_LOCATION = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
+
     public Supplier<ItemStack> icon;
     public final List<Item> items;
     public boolean enabled = true;
@@ -59,7 +55,7 @@ public class Filter extends Button
     @Override
     public void renderButton(PoseStack poseStack, int i, int j, float f) {
         Minecraft mc = Minecraft.getInstance();
-        mc.getTextureManager().bind(TABS);
+        mc.getTextureManager().bind(CREATIVE_TABS_LOCATION);
 
         GlStateManager._blendColor(1f, 1f, 1f, this.alpha);
         GlStateManager._disableLighting();

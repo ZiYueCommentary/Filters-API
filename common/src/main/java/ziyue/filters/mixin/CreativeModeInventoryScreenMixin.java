@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ziyue.filters.FiltersApi;
+import ziyue.filters.FilterBuilder;
 import ziyue.filters.gui.IconButton;
 import ziyue.filters.Filter;
 import ziyue.filters.FilterList;
@@ -54,12 +54,12 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
 
     @Inject(at = @At("HEAD"), method = "render")
     protected void beforeRender(PoseStack poseStack, int i, int j, float f, CallbackInfo ci) {
-        FiltersApi.FILTERS.forEach((map, filter1) -> filtersApi$showButtons(filter1, false));
-        FiltersApi.FILTERS.forEach((map, filter) -> filter.forEach(button -> button.visible = false));
+        FilterBuilder.FILTERS.forEach((map, filter1) -> filtersApi$showButtons(filter1, false));
+        FilterBuilder.FILTERS.forEach((map, filter) -> filter.forEach(button -> button.visible = false));
 
-        if (!FiltersApi.isTabHasFilters(selectedTab)) return;
+        if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
         filtersApi$updateItems();
-        FilterList filter = FiltersApi.FILTERS.get(selectedTab);
+        FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
         filtersApi$showButtons(filter, true);
         for (int o = 0; o < filter.size(); o++) {
             if ((o >= filter.filterIndex) && (o < filter.filterIndex + 4)) {
@@ -74,15 +74,15 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
 
     @Inject(at = @At("TAIL"), method = "render")
     protected void afterRender(PoseStack poseStack, int i, int j, float f, CallbackInfo ci) {
-        if (!FiltersApi.isTabHasFilters(selectedTab)) return;
+        if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
-        FilterList filter = FiltersApi.FILTERS.get(selectedTab);
+        FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
         if (filter.btnScrollUp.isHovered()) renderTooltip(poseStack, filter.btnScrollUp.getMessage(), i, j);
         if (filter.btnScrollDown.isHovered()) renderTooltip(poseStack, filter.btnScrollDown.getMessage(), i, j);
         if (filter.btnEnableAll.isHovered()) renderTooltip(poseStack, filter.btnEnableAll.getMessage(), i, j);
         if (filter.btnDisableAll.isHovered()) renderTooltip(poseStack, filter.btnDisableAll.getMessage(), i, j);
-        if (filter.btnOptions != null && filter.btnOptions.isHovered() && filter.btnOptionsTooltip != null)
-            renderTooltip(poseStack, filter.btnOptionsTooltip, i, j);
+        if (filter.btnOptions != null && filter.btnOptions.isHovered() && filter.btnReservedTooltip != null)
+            renderTooltip(poseStack, filter.btnReservedTooltip, i, j);
 
         filter.forEach(filter1 -> {
             if (filter1.isHovered()) renderTooltip(poseStack, filter1.getMessage(), i, j);
@@ -91,13 +91,13 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
 
     @Inject(at = @At("TAIL"), method = "init")
     protected void afterInit(CallbackInfo ci) {
-        FiltersApi.FILTERS.forEach((map, filter) -> {
+        FilterBuilder.FILTERS.forEach((map, filter) -> {
             filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, new TranslatableComponent("button.filters.scroll_up").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
             filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 127, new TranslatableComponent("button.filters.scroll_down").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
-            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, new TranslatableComponent("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FiltersApi.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
-            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, new TranslatableComponent("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FiltersApi.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
-            if (filter.btnOptionsOnPress != null) {
-                filter.btnOptions = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnOptionsTooltip, filter.btnOptionsOnPress, filter.btnOptionsIcon, filter.btnOptionsIconU, filter.btnOptionsIconV);
+            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, new TranslatableComponent("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
+            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, new TranslatableComponent("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
+            if (filter.btnReservedOnPress != null) {
+                filter.btnOptions = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
                 addButton(filter.btnOptions);
             }
             addButton(filter.btnScrollUp);
@@ -119,7 +119,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             list.btnScrollDown.visible = false;
         }
         if (list.btnOptions != null) {
-            if (list.btnOptionsOnPress != null) {
+            if (list.btnReservedOnPress != null) {
                 list.btnOptions.visible = visible;
             } else {
                 list.btnOptions.visible = false;
@@ -133,7 +133,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     protected void filtersApi$updateItems() {
         visibleTags.clear();
         menu.items.clear(); // clear the tab
-        FiltersApi.FILTERS.get(selectedTab).forEach(
+        FilterBuilder.FILTERS.get(selectedTab).forEach(
                 filter -> {
                     if (filter.enabled) {
                         filter.items.forEach(item -> menu.items.add(new ItemStack(item))); // add items

@@ -2,8 +2,6 @@ package ziyue.filters.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -11,14 +9,12 @@ import net.minecraft.resources.ResourceLocation;
 
 /**
  * Button with icon.
- * Originally from <a href="https://github.com/MrCrayfish/Filters/blob/master/src/main/java/com/mrcrayfish/filters/gui/widget/button/IconButton.java">Filters Mod</a>.
  *
  * @author ZiYueCommentary
  * @see <a href="https://github.com/MrCrayfish/Filters/blob/master/src/main/java/com/mrcrayfish/filters/gui/widget/button/IconButton.java">Filters Mod</a>
  * @since 1.0.0
  */
 
-@Environment(EnvType.CLIENT)
 public class IconButton extends Button
 {
     protected ResourceLocation iconResource;

@@ -67,12 +67,22 @@ components.java {
 
 publishing {
     publications {
-        mavenForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
+        mavenCommon(MavenPublication) {
+            artifactId = rootProject.archives_base_name + "-forge"
+            artifact(remapJar)
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
         }
     }
 
     repositories {
+        maven {
+            url = "https://dashboard.maven.ziyuesinicization.site/repository/maven-releases/"
+            credentials {
+                username = "ZiYueCommentary"
+                password = System.getenv("MAVEN_PASS")
+            }
+        }
     }
 }

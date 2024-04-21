@@ -1,7 +1,5 @@
 package ziyue.filters;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
  * @since 1.0.0
  */
 
-@Environment(EnvType.CLIENT)
 public class FilterList extends ArrayList<Filter>
 {
     public Button btnScrollUp, btnScrollDown, btnEnableAll, btnDisableAll, btnOptions;
@@ -25,11 +22,10 @@ public class FilterList extends ArrayList<Filter>
     public boolean enabled = true;
 
     public Filter uncategorizedItems = null;
-    public Button.OnPress btnOptionsOnPress = null;
-    public Component btnOptionsTooltip = null;
-    public ResourceLocation btnOptionsIcon = null;
-    public int btnOptionsIconU = 0;
-    public int btnOptionsIconV = 0;
+    public Button.OnPress btnReservedOnPress = null;
+    public Component btnReservedTooltip = null;
+    public ResourceLocation btnReservedIcon = null;
+    public int btnReservedIconU = 0, btnReservedIconV = 0;
 
     /**
      * Creating an empty filter.
