@@ -98,14 +98,14 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, new TranslatableComponent("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
             if (filter.btnReservedOnPress != null) {
                 filter.btnOptions = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
-                addButton(filter.btnOptions);
+                addRenderableWidget(filter.btnOptions);
             }
-            addButton(filter.btnScrollUp);
-            addButton(filter.btnScrollDown);
-            addButton(filter.btnEnableAll);
-            addButton(filter.btnDisableAll);
+            addRenderableWidget(filter.btnScrollUp);
+            addRenderableWidget(filter.btnScrollDown);
+            addRenderableWidget(filter.btnEnableAll);
+            addRenderableWidget(filter.btnDisableAll);
 
-            filter.forEach(this::addButton);
+            filter.forEach(this::addRenderableWidget);
         });
     }
 

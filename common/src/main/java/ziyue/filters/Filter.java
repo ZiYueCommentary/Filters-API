@@ -1,14 +1,11 @@
 package ziyue.filters;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -54,25 +51,22 @@ public class Filter extends Button
 
     @Override
     public void renderButton(PoseStack poseStack, int i, int j, float f) {
-        Minecraft mc = Minecraft.getInstance();
-        mc.getTextureManager().bind(CREATIVE_TABS_LOCATION);
-
-        GlStateManager._blendColor(1f, 1f, 1f, this.alpha);
-        GlStateManager._disableLighting();
-        GlStateManager._enableBlend();
-        GlStateManager._blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value, GlStateManager.SourceFactor.ONE.value, GlStateManager.DestFactor.ZERO.value);
-        GlStateManager._blendFunc(GlStateManager.SourceFactor.SRC_ALPHA.value, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA.value);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.enableDepthTest();
 
         int width = this.enabled ? 32 : 28;
         int textureX = 28;
         int textureY = this.enabled ? 32 : 0;
         this.drawRotatedTexture(poseStack.last().pose(), x, y, textureX, textureY, width);
 
-        RenderSystem.enableRescaleNormal();
-        ItemRenderer renderer = mc.getItemRenderer();
+        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
         renderer.blitOffset = 100f;
         renderer.renderAndDecorateItem(icon.get(), x + 8, y + 6);
-        renderer.renderGuiItemDecorations(mc.font, icon.get(), x + 8, y + 6);
+        renderer.renderGuiItemDecorations(Minecraft.getInstance().font, icon.get(), x + 8, y + 6);
         renderer.blitOffset = 0f;
     }
 
@@ -81,7 +75,7 @@ public class Filter extends Button
         float scaleY = 0.00390625F;
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.getBuilder();
-        bufferBuilder.begin(7, DefaultVertexFormat.POSITION_TEX);
+        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
         bufferBuilder.vertex(pose, x, y + height, 0f).uv(((float) (textureX + height) * scaleX), ((float) (textureY) * scaleY)).endVertex();
         bufferBuilder.vertex(pose, x + width, y + height, 0f).uv(((float) (textureX + height) * scaleX), ((float) (textureY + width) * scaleY)).endVertex();
         bufferBuilder.vertex(pose, x + width, y, 0f).uv(((float) (textureX) * scaleX), ((float) (textureY + width) * scaleY)).endVertex();
