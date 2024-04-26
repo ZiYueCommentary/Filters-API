@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +26,7 @@ import ziyue.filters.FilterList;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Set;
 
 import static ziyue.filters.FiltersApi.ICONS;
 
@@ -40,13 +42,11 @@ import static ziyue.filters.FiltersApi.ICONS;
 @Mixin(CreativeModeInventoryScreen.class)
 public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingInventoryScreen<CreativeModeInventoryScreen.ItemPickerMenu>
 {
-    @Shadow
-    private float scrollOffs;
-    @Shadow
-    @Final
-    private Map<ResourceLocation, Tag<Item>> visibleTags;
-    @Shadow
-    private static int selectedTab;
+    @Shadow private static int selectedTab;
+
+    @Shadow @Final private Set<TagKey<Item>> visibleTags;
+
+    @Shadow private float scrollOffs;
 
     public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
@@ -77,15 +77,15 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
         if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
         FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
-        if (filter.btnScrollUp.isHovered()) renderTooltip(poseStack, filter.btnScrollUp.getMessage(), i, j);
-        if (filter.btnScrollDown.isHovered()) renderTooltip(poseStack, filter.btnScrollDown.getMessage(), i, j);
-        if (filter.btnEnableAll.isHovered()) renderTooltip(poseStack, filter.btnEnableAll.getMessage(), i, j);
-        if (filter.btnDisableAll.isHovered()) renderTooltip(poseStack, filter.btnDisableAll.getMessage(), i, j);
-        if (filter.btnOptions != null && filter.btnOptions.isHovered() && filter.btnReservedTooltip != null)
+        if (filter.btnScrollUp.isHoveredOrFocused()) renderTooltip(poseStack, filter.btnScrollUp.getMessage(), i, j);
+        if (filter.btnScrollDown.isHoveredOrFocused()) renderTooltip(poseStack, filter.btnScrollDown.getMessage(), i, j);
+        if (filter.btnEnableAll.isHoveredOrFocused()) renderTooltip(poseStack, filter.btnEnableAll.getMessage(), i, j);
+        if (filter.btnDisableAll.isHoveredOrFocused()) renderTooltip(poseStack, filter.btnDisableAll.getMessage(), i, j);
+        if (filter.btnOptions != null && filter.btnOptions.isHoveredOrFocused() && filter.btnReservedTooltip != null)
             renderTooltip(poseStack, filter.btnReservedTooltip, i, j);
 
         filter.forEach(filter1 -> {
-            if (filter1.isHovered()) renderTooltip(poseStack, filter1.getMessage(), i, j);
+            if (filter1.isHoveredOrFocused()) renderTooltip(poseStack, filter1.getMessage(), i, j);
         });
     }
 

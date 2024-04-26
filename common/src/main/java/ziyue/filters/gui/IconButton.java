@@ -36,7 +36,7 @@ public class IconButton extends Button
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        int k = this.getYImage(this.isHovered());
+        int k = this.getYImage(this.isHoveredOrFocused());
         this.blit(poseStack, this.x, this.y, 0, 46 + k * 20, this.width / 2, this.height);
         this.blit(poseStack, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
         RenderSystem.setShaderTexture(0, this.iconResource);
