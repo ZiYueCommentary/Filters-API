@@ -39,7 +39,7 @@ public class Filter extends Button
     public boolean enabled = true;
 
     protected Filter(Component component, Supplier<ItemStack> icon, List<Item> items) {
-        super(0, 0, 32, 28, component, Button::onPress, (button, poseStack, i, j) -> {});
+        super(0, 0, 32, 28, component, Button::onPress, Button::renderToolTip);
         this.icon = icon;
         this.items = items;
     }
