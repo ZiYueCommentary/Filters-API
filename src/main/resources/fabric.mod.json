@@ -1,0 +1,33 @@
+{
+    "schemaVersion": 1,
+    "id": "filters",
+    "version": "${version}",
+    "name": "Filters API",
+    "description": "Provides a filtering system to creative mode tabs.",
+    "authors": [ "ZiYueCommentary" ],
+    "contact": {
+        "homepage": "https://modrinth.com/project/filters-api",
+        "sources": "https://github.com/ZiYueCommentary/Filters-API",
+        "issues": "https://github.com/ZiYueCommentary/Filters-API/issues"
+    },
+    "license": "MIT",
+    "icon": "assets/filters/logo.png",
+    "environment": "*",
+    "entrypoints": {
+        "client": [
+            "ziyue.filters.FiltersApiFabric"
+        ]
+    },
+    "custom": {
+        "modmenu": {
+            "badges": [ "library" ]
+        }
+    },
+    "mixins": [
+        "filters.mixins.json"
+    ],
+    "depends": {
+        "fabric": "*",
+        "minecraft": ">=1.16"
+    }
+}
