@@ -1,8 +1,10 @@
 package ziyue.filters.gui;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -30,16 +32,16 @@ public class IconButton extends ButtonWidget
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
-        MinecraftClient.getInstance().getTextureManager().bindTexture(WIDGETS_TEXTURE);
-        GlStateManager.blendColor(1f, 1f, 1f, 1f);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_COLOR.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528, GlStateManager.SrcFactor.ONE.field_22545, GlStateManager.DstFactor.ZERO.field_22528);
-        GlStateManager.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
+        RenderSystem.setShaderColor(1f, 1f, 1f, this.alpha);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.enableDepthTest();
         int offset = this.getYImage(this.isHovered());
         this.drawTexture(matrices, this.x, this.y, 0, 46 + offset * 20, this.width / 2, this.height);
         this.drawTexture(matrices, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
-        if (!this.active) GlStateManager.blendColor(0.5f, 0.5f, 0.5f, 1f);
-        MinecraftClient.getInstance().getTextureManager().bindTexture(this.iconResource);
+        RenderSystem.setShaderTexture(0, this.iconResource);
         this.drawTexture(matrices, this.x + 2, this.y + 2, this.iconU, this.iconV, 16, 16);
     }
 }

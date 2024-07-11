@@ -4,9 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
@@ -53,22 +51,19 @@ public class Filter extends ButtonWidget
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        MinecraftClient minecraft = MinecraftClient.getInstance();
-        minecraft.getTextureManager().bindTexture(CREATIVE_TABS_LOCATION);
-
-        GlStateManager.blendColor(1f, 1f, 1f, this.alpha);
-        GlStateManager.disableLighting();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528, GlStateManager.SrcFactor.ONE.field_22545, GlStateManager.DstFactor.ZERO.field_22528);
-        GlStateManager.blendFunc(GlStateManager.SrcFactor.SRC_ALPHA.field_22545, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA.field_22528);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.enableDepthTest();
 
         int width = this.enabled ? 32 : 28;
         int textureX = 28;
         int textureY = this.enabled ? 32 : 0;
         this.drawRotatedTexture(matrices.peek().getModel(), x, y, textureX, textureY, width);
 
-        RenderSystem.enableRescaleNormal();
-        ItemRenderer renderer = minecraft.getItemRenderer();
+        ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
         renderer.renderGuiItemIcon(icon.get(), x + 8, y + 6);
     }
 
@@ -78,7 +73,7 @@ public class Filter extends ButtonWidget
         float scaleY = 0.00390625F;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(7, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
         bufferBuilder.vertex(pose, x, y + height, 0f).texture(((float) (textureX + height) * scaleX), ((float) (textureY) * scaleY)).next();
         bufferBuilder.vertex(pose, x + width, y + height, 0f).texture(((float) (textureX + height) * scaleX), ((float) (textureY + width) * scaleY)).next();
         bufferBuilder.vertex(pose, x + width, y, 0f).texture(((float) (textureX) * scaleX), ((float) (textureY + width) * scaleY)).next();

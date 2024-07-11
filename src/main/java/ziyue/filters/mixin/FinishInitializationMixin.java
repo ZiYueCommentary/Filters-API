@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Mixin(RenderSystem.class)
 public abstract class FinishInitializationMixin
 {
-    @Inject(at = @At("TAIL"), method = "finishInitialization")
+    @Inject(at = @At("TAIL"), method = "finishInitialization", remap = false)
     private static void afterFinishInitialization(CallbackInfo callbackInfo) {
         AtomicInteger uncategorizedItems = new AtomicInteger(0);
         AtomicInteger uncategorizedFilters = new AtomicInteger(0);

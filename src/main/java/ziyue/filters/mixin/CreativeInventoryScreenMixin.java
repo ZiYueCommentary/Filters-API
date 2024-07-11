@@ -97,14 +97,14 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
             filter.btnDisableAll = new IconButton(this.x - 50, this.y + 32, new TranslatableText("button.filters.disable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
             if (filter.btnReservedOnPress != null) {
                 filter.btnReserved = new IconButton(this.x - 50, this.y + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
-                this.addButton(filter.btnReserved);
+                this.addDrawableChild(filter.btnReserved);
             }
-            this.addButton(filter.btnScrollUp);
-            this.addButton(filter.btnScrollDown);
-            this.addButton(filter.btnEnableAll);
-            this.addButton(filter.btnDisableAll);
+            this.addDrawableChild(filter.btnScrollUp);
+            this.addDrawableChild(filter.btnScrollDown);
+            this.addDrawableChild(filter.btnEnableAll);
+            this.addDrawableChild(filter.btnDisableAll);
 
-            filter.forEach(this::addButton);
+            filter.forEach(this::addDrawableChild);
         });
     }
 
