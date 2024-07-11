@@ -48,7 +48,7 @@ jar {
 	}
 }
 
-tasks.register('setupFiles') {
+afterEvaluate {
     download {
         src "https://weblate.ziyuesinicization.site/api/components/filters-api/en_us-json/file/"
         dest "lang.zip"
@@ -56,12 +56,10 @@ tasks.register('setupFiles') {
         retries - 1
     }
     copy {
-        outputs.upToDateWhen { false }
         from(zipTree("lang.zip"))
         into "temp_lang"
     }
     copy {
-        outputs.upToDateWhen { false }
         from "temp_lang/filters-api/en_us-json/"
         into "/"
     }
@@ -72,6 +70,7 @@ publishing {
 	publications {
 		create("mavenJava", MavenPublication) {
 			artifactId = project.archives_base_name + "-fabric"
+            version = project.mod_version + "+" + project.minecraft_version
 			from components.java
 		}
 	}
