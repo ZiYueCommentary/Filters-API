@@ -6,11 +6,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +23,7 @@ import ziyue.filters.FilterList;
 import ziyue.filters.gui.IconButton;
 
 import java.util.Comparator;
-import java.util.Map;
+import java.util.Set;
 
 import static ziyue.filters.FiltersApi.ICONS;
 
@@ -33,7 +32,6 @@ import static ziyue.filters.FiltersApi.ICONS;
  *
  * @author ZiYueCommentary
  * @see Filter
- * @see AbstractInventoryScreenMixin
  * @since 1.0.0
  */
 
@@ -42,7 +40,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
 {
     @Shadow private static int selectedTab;
 
-    @Shadow @Final private Map<Identifier, Tag<Item>> searchResultTags;
+    @Shadow @Final private Set<TagKey<Item>> searchResultTags;
 
     @Shadow private float scrollPosition;
 

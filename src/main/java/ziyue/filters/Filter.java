@@ -1,6 +1,5 @@
 package ziyue.filters;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -25,7 +24,6 @@ import java.util.function.Supplier;
  *
  * @author ZiYueCommentary
  * @see CreativeInventoryScreenMixin
- * @see ziyue.filters.mixin.AbstractInventoryScreenMixin
  * @see FilterBuilder
  * @since 1.0.0
  */
@@ -61,7 +59,7 @@ public class Filter extends ButtonWidget
         int width = this.enabled ? 32 : 28;
         int textureX = 28;
         int textureY = this.enabled ? 32 : 0;
-        this.drawRotatedTexture(matrices.peek().getModel(), x, y, textureX, textureY, width);
+        this.drawRotatedTexture(matrices.peek().getPositionMatrix(), x, y, textureX, textureY, width);
 
         ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
         renderer.renderGuiItemIcon(icon.get(), x + 8, y + 6);
