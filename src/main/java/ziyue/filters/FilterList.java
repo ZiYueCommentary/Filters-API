@@ -26,7 +26,6 @@ public class FilterList extends ArrayList<Filter>
     public ButtonWidget.PressAction btnReservedOnPress = null;
     public Text btnReservedTooltip = null;
     public Identifier btnReservedIcon = null;
-    public int btnReservedIconU = 0, btnReservedIconV = 0;
 
     /**
      * Creating an empty filter.

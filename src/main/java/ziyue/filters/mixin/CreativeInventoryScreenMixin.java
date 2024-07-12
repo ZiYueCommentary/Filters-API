@@ -1,8 +1,8 @@
 package ziyue.filters.mixin;
 
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.*;
 
 /**
  * Render filters.
@@ -46,11 +46,8 @@ import static ziyue.filters.FiltersApi.ICONS;
 public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler>
 {
     @Shadow private static ItemGroup selectedTab;
-
     @Shadow @Final private Set<TagKey<Item>> searchResultTags;
-
     @Shadow private float scrollPosition;
-
     @Unique
     private static boolean filtersAPI$itemsCategorized = false;
 
@@ -94,7 +91,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     }
 
     @Inject(at = @At("HEAD"), method = "render")
-    protected void beforeRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    protected void beforeRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter1) -> filtersApi$showButtons(filter1, false));
         FilterBuilder.FILTERS.forEach((map, filter) -> filter.forEach(button -> button.visible = false));
 
@@ -114,32 +111,32 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     }
 
     @Inject(at = @At("TAIL"), method = "render")
-    protected void afterRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    protected void afterRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
         FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
-        if (filter.btnScrollUp.isHovered()) this.renderTooltip(matrices, filter.btnScrollUp.getMessage(), mouseX, mouseY);
-        if (filter.btnScrollDown.isHovered()) this.renderTooltip(matrices, filter.btnScrollDown.getMessage(), mouseX, mouseY);
-        if (filter.btnEnableAll.isHovered()) this.renderTooltip(matrices, filter.btnEnableAll.getMessage(), mouseX, mouseY);
-        if (filter.btnDisableAll.isHovered()) this.renderTooltip(matrices, filter.btnDisableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollUp.isHovered()) context.drawTooltip(this.textRenderer, filter.btnScrollUp.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollDown.isHovered()) context.drawTooltip(this.textRenderer, filter.btnScrollDown.getMessage(), mouseX, mouseY);
+        if (filter.btnEnableAll.isHovered()) context.drawTooltip(this.textRenderer, filter.btnEnableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnDisableAll.isHovered()) context.drawTooltip(this.textRenderer, filter.btnDisableAll.getMessage(), mouseX, mouseY);
         if (filter.btnReserved != null && filter.btnReserved.isHovered() && filter.btnReservedTooltip != null) {
-            this.renderTooltip(matrices, filter.btnReservedTooltip, mouseX, mouseY);
+            context.drawTooltip(this.textRenderer, filter.btnReservedTooltip, mouseX, mouseY);
         }
 
         filter.forEach(filter1 -> {
-            if (filter1.isHovered()) this.renderTooltip(matrices, filter1.getMessage(), mouseX, mouseY);
+            if (filter1.isHovered()) context.drawTooltip(this.textRenderer, filter1.getMessage(), mouseX, mouseY);
         });
     }
 
     @Inject(at = @At("TAIL"), method = "init")
     protected void afterInit(CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter) -> {
-            filter.btnScrollUp = new IconButton(this.x - 22, this.y - 12, Text.translatable("button.filters.scroll_up").formatted(Formatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
-            filter.btnScrollDown = new IconButton(this.x - 22, this.y + 119, Text.translatable("button.filters.scroll_down").formatted(Formatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
-            filter.btnEnableAll = new IconButton(this.x - 50, this.y + 10, Text.translatable("button.filters.enable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
-            filter.btnDisableAll = new IconButton(this.x - 50, this.y + 32, Text.translatable("button.filters.disable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
+            filter.btnScrollUp = new IconButton(this.x - 22, this.y - 12, Text.translatable("button.filters.scroll_up").formatted(Formatting.WHITE), button -> filter.filterIndex--, ICON_UP);
+            filter.btnScrollDown = new IconButton(this.x - 22, this.y + 119, Text.translatable("button.filters.scroll_down").formatted(Formatting.WHITE), button -> filter.filterIndex++, ICON_DOWN);
+            filter.btnEnableAll = new IconButton(this.x - 50, this.y + 10, Text.translatable("button.filters.enable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICON_CHECK);
+            filter.btnDisableAll = new IconButton(this.x - 50, this.y + 32, Text.translatable("button.filters.disable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICON_CROSS);
             if (filter.btnReservedOnPress != null) {
-                filter.btnReserved = new IconButton(this.x - 50, this.y + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
+                filter.btnReserved = new IconButton(this.x - 50, this.y + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon);
                 this.addDrawableChild(filter.btnReserved);
             }
             this.addDrawableChild(filter.btnScrollUp);

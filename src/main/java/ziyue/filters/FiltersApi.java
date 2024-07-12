@@ -18,5 +18,9 @@ public class FiltersApi
 {
     public static final String MOD_ID = "filters";
     public static final Logger LOGGER = LogManager.getLogger("Filters API");
-    public static final Identifier ICONS = new Identifier(FiltersApi.MOD_ID, "textures/gui/filters.png");
+    public static final Identifier ICON_CHECK = new Identifier(FiltersApi.MOD_ID, "check");
+    public static final Identifier ICON_CROSS = new Identifier(FiltersApi.MOD_ID, "cross");
+    public static final Identifier ICON_UP = new Identifier(FiltersApi.MOD_ID, "up");
+    public static final Identifier ICON_DOWN = new Identifier(FiltersApi.MOD_ID, "down");
+    public static final Identifier ICON_WRENCH = new Identifier(FiltersApi.MOD_ID, "wrench");
 }

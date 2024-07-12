@@ -1,6 +1,9 @@
 package ziyue.filters.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,40 +20,22 @@ import net.minecraft.util.Identifier;
 
 public class IconButton extends ButtonWidget
 {
-    protected Identifier iconResource;
-    protected int iconU;
-    protected int iconV;
+    protected static final ButtonTextures TEXTURES = new ButtonTextures(new Identifier("widget/button"), new Identifier("widget/button_disabled"), new Identifier("widget/button_highlighted"));
 
-    public IconButton(int x, int y, Text tooltip, PressAction onPress, Identifier iconResource, int iconU, int iconV) {
+    protected Identifier iconResource;
+
+    public IconButton(int x, int y, Text tooltip, PressAction onPress, Identifier iconResource) {
         super(x, y, 20, 20, tooltip, onPress, DEFAULT_NARRATION_SUPPLIER);
         this.iconResource = iconResource;
-        this.iconU = iconU;
-        this.iconV = iconV;
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, this.alpha);
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        int offset = this.getYImage(this.isHovered());
-        drawTexture(matrices, this.getX(), this.getY(), 0, 46 + offset * 20, this.width / 2, this.height);
-        drawTexture(matrices, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
-        RenderSystem.setShaderTexture(0, this.iconResource);
-        drawTexture(matrices, this.getX() + 2, this.getY() + 2, this.iconU, this.iconV, 16, 16);
-    }
-
-    public int getYImage(boolean hovered) {
-        int i = 1;
-        if (!this.active) {
-            i = 0;
-        } else if (hovered) {
-            i = 2;
-        }
-
-        return i;
+        context.drawGuiTexture(TEXTURES.get(this.active, this.hovered), this.getX(), this.getY(), this.width, this.height);
+        context.drawGuiTexture(this.iconResource, this.getX() + 2, this.getY() + 2, 16, 16);
     }
 }

@@ -1,11 +1,9 @@
 package ziyue.filters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -30,7 +28,8 @@ import java.util.function.Supplier;
 
 public class Filter extends ButtonWidget
 {
-    public static final Identifier CREATIVE_TABS_LOCATION = new Identifier("textures/gui/container/creative_inventory/tabs.png");
+    public static final Identifier TAB_SELECTED = new Identifier("textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png");
+    public static final Identifier TAB_UNSELECTED = new Identifier("textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png");
 
     public Supplier<ItemStack> icon;
     public final List<Item> items;
@@ -48,34 +47,27 @@ public class Filter extends ButtonWidget
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
+        RenderSystem.setShaderTexture(0, enabled ? TAB_SELECTED : TAB_UNSELECTED);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-
-        int width = this.enabled ? 32 : 28;
-        int textureX = 26;
-        int textureY = this.enabled ? 32 : 0;
-        this.drawRotatedTexture(matrices.peek().getPositionMatrix(), this.getX(), this.getY(), textureX, textureY, width);
-
-        ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
-        renderer.renderGuiItemIcon(matrices, icon.get(), this.getX() + 8, this.getY() + 4);
+        this.drawRotatedTexture(context.getMatrices().peek().getPositionMatrix(), this.getX(), this.getY(), this.enabled ? 32 : 28);
+        context.drawItem(icon.get(), this.getX() + 8, this.getY() + 4);
     }
 
-
-    protected void drawRotatedTexture(Matrix4f pose, int x, int y, int textureX, int textureY, int width) {
-        float scaleX = 0.00390625F;
-        float scaleY = 0.00390625F;
+    protected void drawRotatedTexture(Matrix4f pose, int x, int y, int width) {
+        final float scaleX = 0.038524330F;
+        final float scaleY = 0.031324208F;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(pose, x, y + height, 0f).texture(((float) (textureX + height) * scaleX), ((float) (textureY) * scaleY)).next();
-        bufferBuilder.vertex(pose, x + width, y + height, 0f).texture(((float) (textureX + height) * scaleX), ((float) (textureY + width) * scaleY)).next();
-        bufferBuilder.vertex(pose, x + width, y, 0f).texture(((float) (textureX) * scaleX), ((float) (textureY + width) * scaleY)).next();
-        bufferBuilder.vertex(pose, x, y, 0f).texture(((float) (textureX) * scaleX), ((float) (textureY) * scaleY)).next();
+        bufferBuilder.vertex(pose, x, y + height, 0).texture(((float) height * scaleX), 0).next();
+        bufferBuilder.vertex(pose, x + width, y + height, 0).texture(((float) height * scaleX), ((float) width * scaleY)).next();
+        bufferBuilder.vertex(pose, x + width, y, 0).texture(0, ((float) width * scaleY)).next();
+        bufferBuilder.vertex(pose, x, y, 0).texture(0, 0).next();
         tessellator.draw();
     }
 
