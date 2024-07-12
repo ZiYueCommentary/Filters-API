@@ -22,7 +22,7 @@ public class IconButton extends ButtonWidget
     protected int iconV;
 
     public IconButton(int x, int y, Text tooltip, PressAction onPress, Identifier iconResource, int iconU, int iconV) {
-        super(x, y, 20, 20, tooltip, onPress);
+        super(x, y, 20, 20, tooltip, onPress, DEFAULT_NARRATION_SUPPLIER);
         this.iconResource = iconResource;
         this.iconU = iconU;
         this.iconV = iconV;
@@ -30,16 +30,27 @@ public class IconButton extends ButtonWidget
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
         RenderSystem.setShaderColor(1f, 1f, 1f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         int offset = this.getYImage(this.isHovered());
-        this.drawTexture(matrices, this.x, this.y, 0, 46 + offset * 20, this.width / 2, this.height);
-        this.drawTexture(matrices, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
+        drawTexture(matrices, this.getX(), this.getY(), 0, 46 + offset * 20, this.width / 2, this.height);
+        drawTexture(matrices, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
         RenderSystem.setShaderTexture(0, this.iconResource);
-        this.drawTexture(matrices, this.x + 2, this.y + 2, this.iconU, this.iconV, 16, 16);
+        drawTexture(matrices, this.getX() + 2, this.getY() + 2, this.iconU, this.iconV, 16, 16);
+    }
+
+    public int getYImage(boolean hovered) {
+        int i = 1;
+        if (!this.active) {
+            i = 0;
+        } else if (hovered) {
+            i = 2;
+        }
+
+        return i;
     }
 }

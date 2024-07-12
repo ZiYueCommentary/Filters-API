@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class FilterBuilder
      *
      * @since 1.0.0
      */
-    public static final HashMap<Integer, FilterList> FILTERS = new HashMap<>();
+    public static final HashMap<ItemGroup, FilterList> FILTERS = new HashMap<>();
 
     /**
      * Register a filter for specific creative mode tab.
@@ -40,9 +39,9 @@ public class FilterBuilder
      */
     public static Filter registerFilter(ItemGroup creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
-        FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getIndex(), FilterList.empty());
+        FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
         filterList.add(filter);
-        FILTERS.put(creativeModeTab.getIndex(), filterList);
+        FILTERS.put(creativeModeTab, filterList);
         return filter;
     }
 
@@ -52,10 +51,10 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab) {
-        Filter filter = new Filter(new TranslatableText("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
-        FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getIndex(), FilterList.empty());
+        Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
+        FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
         filterList.uncategorizedItems = filter;
-        FILTERS.put(creativeModeTab.getIndex(), filterList);
+        FILTERS.put(creativeModeTab, filterList);
         return filter;
     }
 
@@ -65,10 +64,10 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Supplier<ItemStack> filterIcon) {
-        Filter filter = new Filter(new TranslatableText("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
-        FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getIndex(), FilterList.empty());
+        Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
+        FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
         filterList.uncategorizedItems = filter;
-        FILTERS.put(creativeModeTab.getIndex(), filterList);
+        FILTERS.put(creativeModeTab, filterList);
         return filter;
     }
 
@@ -85,9 +84,9 @@ public class FilterBuilder
      */
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
-        FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getIndex(), FilterList.empty());
+        FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
         filterList.uncategorizedItems = filter;
-        FILTERS.put(creativeModeTab.getIndex(), filterList);
+        FILTERS.put(creativeModeTab, filterList);
         return filter;
     }
 
@@ -113,26 +112,12 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static void setReservedButton(ItemGroup creativeModeTab, Text tooltip, ButtonWidget.PressAction onPress, Identifier icon, int iconU, int iconV) {
-        FilterList filters = FilterBuilder.FILTERS.get(creativeModeTab.getIndex());
+        FilterList filters = FilterBuilder.FILTERS.get(creativeModeTab);
         filters.btnReservedTooltip = tooltip;
         filters.btnReservedOnPress = onPress;
         filters.btnReservedIcon = icon;
         filters.btnReservedIconU = iconU;
         filters.btnReservedIconV = iconV;
-    }
-
-    /**
-     * @param creativeModeTabId the id of the creative mode tab
-     * @param visible           whether the filters are enabled
-     * @author ZiYueCommentary
-     * @see #filtersVisibility(ItemGroup, boolean)
-     * @since 1.0.0
-     * @deprecated
-     */
-    @Deprecated
-    public static void filtersVisibility(int creativeModeTabId, boolean visible) {
-        if (FilterBuilder.FILTERS.containsKey(creativeModeTabId))
-            FilterBuilder.FILTERS.get(creativeModeTabId).enabled = visible;
     }
 
     /**
@@ -144,23 +129,8 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static void filtersVisibility(ItemGroup creativeModeTab, boolean visible) {
-        FilterBuilder.filtersVisibility(creativeModeTab.getIndex(), visible);
-    }
-
-    /**
-     * @param creativeModeTabId the id of the creative mode tab
-     * @param item              the item
-     * @author ZiYueCommentary
-     * @see #isItemCategorized(ItemGroup, Item)
-     * @since 1.0.0
-     * @deprecated
-     */
-    @Deprecated
-    public static boolean isItemCategorized(int creativeModeTabId, Item item) {
-        for (Filter filter : FilterBuilder.FILTERS.get(creativeModeTabId)) {
-            if (filter.items.contains(item)) return true;
-        }
-        return false;
+        if (FilterBuilder.FILTERS.containsKey(creativeModeTab))
+            FilterBuilder.FILTERS.get(creativeModeTab).enabled = visible;
     }
 
     /**
@@ -173,19 +143,10 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static boolean isItemCategorized(ItemGroup creativeModeTab, Item item) {
-        return isItemCategorized(creativeModeTab.getIndex(), item);
-    }
-
-    /**
-     * @param creativeModeTabId the id of the creative mode tab
-     * @author ZiYueCommentary
-     * @see #isTabHasFilters(ItemGroup)
-     * @since 1.0.0
-     * @deprecated
-     */
-    @Deprecated
-    public static boolean isTabHasFilters(int creativeModeTabId) {
-        return (FilterBuilder.FILTERS.containsKey(creativeModeTabId) && !FilterBuilder.FILTERS.get(creativeModeTabId).isEmpty() && (FilterBuilder.FILTERS.get(creativeModeTabId).enabled));
+        for (Filter filter : FilterBuilder.FILTERS.get(creativeModeTab)) {
+            if (filter.items.contains(item)) return true;
+        }
+        return false;
     }
 
     /**
@@ -197,6 +158,6 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static boolean isTabHasFilters(ItemGroup creativeModeTab) {
-        return isTabHasFilters(creativeModeTab.getIndex());
+        return (FilterBuilder.FILTERS.containsKey(creativeModeTab) && !FilterBuilder.FILTERS.get(creativeModeTab).isEmpty() && (FilterBuilder.FILTERS.get(creativeModeTab).enabled));
     }
 }

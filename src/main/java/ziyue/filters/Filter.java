@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 import ziyue.filters.mixin.CreativeInventoryScreenMixin;
 
 import java.util.Arrays;
@@ -37,7 +37,7 @@ public class Filter extends ButtonWidget
     public boolean enabled = true;
 
     protected Filter(Text tooltip, Supplier<ItemStack> icon, List<Item> items) {
-        super(0, 0, 32, 28, tooltip, ButtonWidget::onPress);
+        super(0, 0, 32, 26, tooltip, ButtonWidget::onPress, DEFAULT_NARRATION_SUPPLIER);
         this.icon = icon;
         this.items = items;
     }
@@ -49,7 +49,7 @@ public class Filter extends ButtonWidget
 
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
@@ -57,12 +57,12 @@ public class Filter extends ButtonWidget
         RenderSystem.enableDepthTest();
 
         int width = this.enabled ? 32 : 28;
-        int textureX = 28;
+        int textureX = 26;
         int textureY = this.enabled ? 32 : 0;
-        this.drawRotatedTexture(matrices.peek().getPositionMatrix(), x, y, textureX, textureY, width);
+        this.drawRotatedTexture(matrices.peek().getPositionMatrix(), this.getX(), this.getY(), textureX, textureY, width);
 
         ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
-        renderer.renderGuiItemIcon(icon.get(), x + 8, y + 6);
+        renderer.renderGuiItemIcon(matrices, icon.get(), this.getX() + 8, this.getY() + 4);
     }
 
 
