@@ -1,7 +1,10 @@
 package ziyue.filters;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +22,8 @@ public class FiltersApiForge
     public FiltersApiForge() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         MinecraftForge.EVENT_BUS.register(this);
+        FilterBuilder.registerFilter(CreativeModeTab.TAB_FOOD, new TranslatableComponent("1"), () -> new ItemStack(Items.ACACIA_BOAT));
+        FilterBuilder.registerUncategorizedItemsFilter(CreativeModeTab.TAB_FOOD);
     }
 
     public void doClientStuff(final FMLClientSetupEvent event) {
@@ -34,7 +39,7 @@ public class FiltersApiForge
 
         // collecting uncategorized items
         Registry.ITEM.forEach(item -> {
-            ItemGroup itemGroup = item.getItemCategory();
+            CreativeModeTab itemGroup = item.getItemCategory();
             if (itemGroup != null) {
                 if (FilterBuilder.isTabHasFilters(itemGroup)) {
                     FilterList filters = FilterBuilder.FILTERS.get(itemGroup.getId());

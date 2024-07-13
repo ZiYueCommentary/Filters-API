@@ -1,8 +1,8 @@
 package ziyue.filters;
 
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import ziyue.filters.gui.IconButton;
 
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ public class FilterList extends ArrayList<Filter>
     public boolean enabled = true;
 
     public Filter uncategorizedItems = null;
-    public Button.IPressable btnReservedOnPress = null;
-    public ITextComponent btnReservedTooltip = null;
+    public Button.OnPress btnReservedOnPress = null;
+    public Component btnReservedTooltip = null;
     public ResourceLocation btnReservedIcon = null;
     public int btnReservedIconU = 0, btnReservedIconV = 0;
 

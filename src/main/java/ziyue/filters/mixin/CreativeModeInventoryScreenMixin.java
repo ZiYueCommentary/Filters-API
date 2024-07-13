@@ -1,16 +1,16 @@
 package ziyue.filters.mixin;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.DisplayEffectsScreen;
-import net.minecraft.client.gui.screen.inventory.CreativeScreen;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,25 +33,29 @@ import static ziyue.filters.FiltersApi.ICONS;
  *
  * @author ZiYueCommentary
  * @see Filter
- * @see DisplayEffectsScreenMixin
+ * @see EffectRenderingInventoryScreenMixin
  * @since 1.0.0
  */
 
-@Mixin(CreativeScreen.class)
-public abstract class CreativeScreenMixin extends DisplayEffectsScreen<CreativeScreen.CreativeContainer>
+@Mixin(CreativeModeInventoryScreen.class)
+public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingInventoryScreen<CreativeModeInventoryScreen.ItemPickerMenu>
 {
-    @Shadow private static int selectedTab;
+    @Shadow
+    private static int selectedTab;
 
-    @Shadow private float scrollOffs;
+    @Shadow
+    @Final
+    private Map<ResourceLocation, Tag<Item>> visibleTags;
 
-    @Shadow @Final private Map<ResourceLocation, ITag<Item>> visibleTags;
+    @Shadow
+    private float scrollOffs;
 
-    public CreativeScreenMixin(CreativeScreen.CreativeContainer p_i51091_1_, PlayerInventory p_i51091_2_, ITextComponent p_i51091_3_) {
-        super(p_i51091_1_, p_i51091_2_, p_i51091_3_);
+    public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu p_98701_, Inventory p_98702_, Component p_98703_) {
+        super(p_98701_, p_98702_, p_98703_);
     }
 
     @Inject(at = @At("HEAD"), method = "render")
-    protected void beforeRender(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_, CallbackInfo ci) {
+    protected void beforeRender(PoseStack p_98577_, int p_98578_, int p_98579_, float p_98580_, CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter1) -> filtersApi$showButtons(filter1, false));
         FilterBuilder.FILTERS.forEach((map, filter) -> filter.forEach(button -> button.visible = false));
 
@@ -71,14 +75,18 @@ public abstract class CreativeScreenMixin extends DisplayEffectsScreen<CreativeS
     }
 
     @Inject(at = @At("TAIL"), method = "render")
-    protected void afterRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    protected void afterRender(PoseStack matrices, int mouseX, int mouseY, float p_98580_, CallbackInfo ci) {
         if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
         FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
-        if (filter.btnScrollUp.isHovered()) this.renderTooltip(matrices, filter.btnScrollUp.getMessage(), mouseX, mouseY);
-        if (filter.btnScrollDown.isHovered()) this.renderTooltip(matrices, filter.btnScrollDown.getMessage(), mouseX, mouseY);
-        if (filter.btnEnableAll.isHovered()) this.renderTooltip(matrices, filter.btnEnableAll.getMessage(), mouseX, mouseY);
-        if (filter.btnDisableAll.isHovered()) this.renderTooltip(matrices, filter.btnDisableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollUp.isHovered())
+            this.renderTooltip(matrices, filter.btnScrollUp.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollDown.isHovered())
+            this.renderTooltip(matrices, filter.btnScrollDown.getMessage(), mouseX, mouseY);
+        if (filter.btnEnableAll.isHovered())
+            this.renderTooltip(matrices, filter.btnEnableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnDisableAll.isHovered())
+            this.renderTooltip(matrices, filter.btnDisableAll.getMessage(), mouseX, mouseY);
         if (filter.btnReserved != null && filter.btnReserved.isHovered() && filter.btnReservedTooltip != null) {
             this.renderTooltip(matrices, filter.btnReservedTooltip, mouseX, mouseY);
         }
@@ -91,20 +99,20 @@ public abstract class CreativeScreenMixin extends DisplayEffectsScreen<CreativeS
     @Inject(at = @At("TAIL"), method = "init")
     protected void afterInit(CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter) -> {
-            filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, new TranslationTextComponent("button.filters.scroll_up").withStyle(TextFormatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
-            filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 127, new TranslationTextComponent("button.filters.scroll_down").withStyle(TextFormatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
-            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, new TranslationTextComponent("button.filters.enable_all").withStyle(TextFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
-            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, new TranslationTextComponent("button.filters.disable_all").withStyle(TextFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
+            filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, new TranslatableComponent("button.filters.scroll_up").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
+            filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 127, new TranslatableComponent("button.filters.scroll_down").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
+            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, new TranslatableComponent("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
+            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, new TranslatableComponent("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
             if (filter.btnReservedOnPress != null) {
                 filter.btnReserved = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
-                this.addButton(filter.btnReserved);
+                this.addRenderableWidget(filter.btnReserved);
             }
-            this.addButton(filter.btnScrollUp);
-            this.addButton(filter.btnScrollDown);
-            this.addButton(filter.btnEnableAll);
-            this.addButton(filter.btnDisableAll);
+            this.addRenderableWidget(filter.btnScrollUp);
+            this.addRenderableWidget(filter.btnScrollDown);
+            this.addRenderableWidget(filter.btnEnableAll);
+            this.addRenderableWidget(filter.btnDisableAll);
 
-            filter.forEach(this::addButton);
+            filter.forEach(this::addRenderableWidget);
         });
     }
 

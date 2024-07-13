@@ -1,13 +1,13 @@
 package ziyue.filters;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @since 1.0.0
      */
-    public static Filter registerFilter(ItemGroup creativeModeTab, ITextComponent filterName, Supplier<ItemStack> filterIcon) {
+    public static Filter registerFilter(CreativeModeTab creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getId(), FilterList.empty());
         filterList.add(filter);
@@ -48,11 +48,11 @@ public class FilterBuilder
 
     /**
      * @author ZiYueCommentary
-     * @see #registerUncategorizedItemsFilter(ItemGroup, ITextComponent, Supplier)
+     * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
      * @since 1.0.0
      */
-    public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab) {
-        Filter filter = new Filter(new TranslationTextComponent("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
+    public static Filter registerUncategorizedItemsFilter(CreativeModeTab creativeModeTab) {
+        Filter filter = new Filter(new TranslatableComponent("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getId(), FilterList.empty());
         filterList.uncategorizedItems = filter;
         FILTERS.put(creativeModeTab.getId(), filterList);
@@ -61,11 +61,11 @@ public class FilterBuilder
 
     /**
      * @author ZiYueCommentary
-     * @see #registerUncategorizedItemsFilter(ItemGroup, ITextComponent, Supplier)
+     * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
      * @since 1.0.0
      */
-    public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Supplier<ItemStack> filterIcon) {
-        Filter filter = new Filter(new TranslationTextComponent("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
+    public static Filter registerUncategorizedItemsFilter(CreativeModeTab creativeModeTab, Supplier<ItemStack> filterIcon) {
+        Filter filter = new Filter(new TranslatableComponent("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getId(), FilterList.empty());
         filterList.uncategorizedItems = filter;
         FILTERS.put(creativeModeTab.getId(), filterList);
@@ -83,7 +83,7 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @since 1.0.0
      */
-    public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, ITextComponent filterName, Supplier<ItemStack> filterIcon) {
+    public static Filter registerUncategorizedItemsFilter(CreativeModeTab creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getId(), FilterList.empty());
         filterList.uncategorizedItems = filter;
@@ -93,10 +93,10 @@ public class FilterBuilder
 
     /**
      * @author ZiYueCommentary
-     * @see #setReservedButton(ItemGroup, ITextComponent, Button.IPressable, ResourceLocation, int, int)
+     * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation, int, int)
      * @since 1.0.0
      */
-    public static void setReservedButton(ItemGroup creativeModeTab, ITextComponent tooltip, Button.IPressable onPress) {
+    public static void setReservedButton(CreativeModeTab creativeModeTab, Component tooltip, Button.OnPress onPress) {
         FilterBuilder.setReservedButton(creativeModeTab, tooltip, onPress, FiltersApi.ICONS, 64, 0);
     }
 
@@ -112,7 +112,7 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @since 1.0.0
      */
-    public static void setReservedButton(ItemGroup creativeModeTab, ITextComponent tooltip, Button.IPressable onPress, ResourceLocation icon, int iconU, int iconV) {
+    public static void setReservedButton(CreativeModeTab creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon, int iconU, int iconV) {
         FilterList filters = FilterBuilder.FILTERS.get(creativeModeTab.getId());
         filters.btnReservedTooltip = tooltip;
         filters.btnReservedOnPress = onPress;
@@ -125,7 +125,7 @@ public class FilterBuilder
      * @param creativeModeTabId the id of the creative mode tab
      * @param visible           whether the filters are enabled
      * @author ZiYueCommentary
-     * @see #filtersVisibility(ItemGroup, boolean)
+     * @see #filtersVisibility(CreativeModeTab, boolean)
      * @since 1.0.0
      * @deprecated
      */
@@ -143,7 +143,7 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @since 1.0.0
      */
-    public static void filtersVisibility(ItemGroup creativeModeTab, boolean visible) {
+    public static void filtersVisibility(CreativeModeTab creativeModeTab, boolean visible) {
         FilterBuilder.filtersVisibility(creativeModeTab.getId(), visible);
     }
 
@@ -151,7 +151,7 @@ public class FilterBuilder
      * @param creativeModeTabId the id of the creative mode tab
      * @param item              the item
      * @author ZiYueCommentary
-     * @see #isItemCategorized(ItemGroup, Item)
+     * @see #isItemCategorized(CreativeModeTab, Item)
      * @since 1.0.0
      * @deprecated
      */
@@ -172,14 +172,14 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @since 1.0.0
      */
-    public static boolean isItemCategorized(ItemGroup creativeModeTab, Item item) {
+    public static boolean isItemCategorized(CreativeModeTab creativeModeTab, Item item) {
         return isItemCategorized(creativeModeTab.getId(), item);
     }
 
     /**
      * @param creativeModeTabId the id of the creative mode tab
      * @author ZiYueCommentary
-     * @see #isTabHasFilters(ItemGroup)
+     * @see #isTabHasFilters(CreativeModeTab)
      * @since 1.0.0
      * @deprecated
      */
@@ -196,7 +196,7 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @since 1.0.0
      */
-    public static boolean isTabHasFilters(ItemGroup creativeModeTab) {
+    public static boolean isTabHasFilters(CreativeModeTab creativeModeTab) {
         return isTabHasFilters(creativeModeTab.getId());
     }
 }
