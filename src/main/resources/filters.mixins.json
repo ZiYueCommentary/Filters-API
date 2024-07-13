@@ -7,8 +7,8 @@
   "mixins": [
   ],
   "client": [
-      "CreativeModeInventoryScreenMixin",
-      "EffectRenderingInventoryScreenMixin"
+    "CreativeModeInventoryScreenMixin",
+    "EffectRenderingInventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

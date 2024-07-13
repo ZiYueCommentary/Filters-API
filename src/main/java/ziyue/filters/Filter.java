@@ -2,7 +2,6 @@ package ziyue.filters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
@@ -11,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix4f;
 import ziyue.filters.mixin.CreativeModeInventoryScreenMixin;
 import ziyue.filters.mixin.EffectRenderingInventoryScreenMixin;
 
@@ -39,7 +39,7 @@ public class Filter extends Button
     public boolean enabled = true;
 
     protected Filter(Component tooltip, Supplier<ItemStack> icon, List<Item> items) {
-        super(0, 0, 32, 28, tooltip, Button::onPress);
+        super(0, 0, 32, 26, tooltip, Button::onPress, DEFAULT_NARRATION);
         this.icon = icon;
         this.items = items;
     }
@@ -50,7 +50,7 @@ public class Filter extends Button
     }
 
     @Override
-    public void renderButton(PoseStack matrices, int mouseX, int mouseY, float delta) {
+    public void renderWidget(PoseStack matrices, int p_93658_, int p_93659_, float p_93660_) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
@@ -59,12 +59,12 @@ public class Filter extends Button
         RenderSystem.enableDepthTest();
 
         int width = this.enabled ? 32 : 28;
-        int textureX = 28;
+        int textureX = 26;
         int textureY = this.enabled ? 32 : 0;
-        this.drawRotatedTexture(matrices.last().pose(), x, y, textureX, textureY, width);
+        this.drawRotatedTexture(matrices.last().pose(), this.getX(), this.getY(), textureX, textureY, width);
 
         ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-        renderer.renderGuiItem(icon.get(), x + 8, y + 6);
+        renderer.renderGuiItem(matrices, icon.get(), this.getX() + 8, this.getY() + 4);
     }
 
 
@@ -79,10 +79,6 @@ public class Filter extends Button
         bufferBuilder.vertex(pose, x + width, y, 0f).uv(((float) (textureX) * scaleX), ((float) (textureY + width) * scaleY)).endVertex();
         bufferBuilder.vertex(pose, x, y, 0f).uv(((float) (textureX) * scaleX), ((float) (textureY) * scaleY)).endVertex();
         tesselator.end();
-    }
-
-    public boolean isHovered() {
-        return this.isHovered;
     }
 
     /**
