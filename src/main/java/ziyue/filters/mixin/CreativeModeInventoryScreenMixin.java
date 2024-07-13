@@ -2,6 +2,7 @@ package ziyue.filters.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.*;
 
 /**
  * Render filters.
@@ -95,7 +96,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     }
 
     @Inject(at = @At("HEAD"), method = "render")
-    protected void beforeRender(PoseStack p_98577_, int p_98578_, int p_98579_, float p_98580_, CallbackInfo ci) {
+    protected void beforeRender(GuiGraphics p_283000_, int p_281317_, int p_282770_, float p_281295_, CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter1) -> filtersApi$showButtons(filter1, false));
         FilterBuilder.FILTERS.forEach((map, filter) -> filter.forEach(button -> button.visible = false));
 
@@ -115,36 +116,32 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     }
 
     @Inject(at = @At("TAIL"), method = "render")
-    protected void afterRender(PoseStack matrices, int mouseX, int mouseY, float p_98580_, CallbackInfo ci) {
+    protected void afterRender(GuiGraphics graphics, int mouseX, int mouseY, float p_281295_, CallbackInfo ci) {
         if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
         FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
-        if (filter.btnScrollUp.isHovered())
-            this.renderTooltip(matrices, filter.btnScrollUp.getMessage(), mouseX, mouseY);
-        if (filter.btnScrollDown.isHovered())
-            this.renderTooltip(matrices, filter.btnScrollDown.getMessage(), mouseX, mouseY);
-        if (filter.btnEnableAll.isHovered())
-            this.renderTooltip(matrices, filter.btnEnableAll.getMessage(), mouseX, mouseY);
-        if (filter.btnDisableAll.isHovered())
-            this.renderTooltip(matrices, filter.btnDisableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollUp.isHovered()) graphics.renderTooltip(this.font, filter.btnScrollUp.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollDown.isHovered()) graphics.renderTooltip(this.font, filter.btnScrollDown.getMessage(), mouseX, mouseY);
+        if (filter.btnEnableAll.isHovered()) graphics.renderTooltip(this.font, filter.btnEnableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnDisableAll.isHovered()) graphics.renderTooltip(this.font, filter.btnDisableAll.getMessage(), mouseX, mouseY);
         if (filter.btnReserved != null && filter.btnReserved.isHovered() && filter.btnReservedTooltip != null) {
-            this.renderTooltip(matrices, filter.btnReservedTooltip, mouseX, mouseY);
+            graphics.renderTooltip(this.font, filter.btnReservedTooltip, mouseX, mouseY);
         }
 
         filter.forEach(filter1 -> {
-            if (filter1.isHovered()) this.renderTooltip(matrices, filter1.getMessage(), mouseX, mouseY);
+            if (filter1.isHovered()) graphics.renderTooltip(this.font, filter1.getMessage(), mouseX, mouseY);
         });
     }
 
     @Inject(at = @At("TAIL"), method = "init")
     protected void afterInit(CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter) -> {
-            filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, Component.translatable("button.filters.scroll_up").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
-            filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 119, Component.translatable("button.filters.scroll_down").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
-            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, Component.translatable("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
-            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, Component.translatable("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
+            filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, Component.translatable("button.filters.scroll_up").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex--, ICON_UP);
+            filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 119, Component.translatable("button.filters.scroll_down").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex++, ICON_DOWN);
+            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, Component.translatable("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICON_CHECK);
+            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, Component.translatable("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICON_CROSS);
             if (filter.btnReservedOnPress != null) {
-                filter.btnReserved = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
+                filter.btnReserved = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon);
                 this.addRenderableWidget(filter.btnReserved);
             }
             this.addRenderableWidget(filter.btnScrollUp);
