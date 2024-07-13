@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "ziyue.filters.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "filters.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "CreativeScreenMixin",
+    "DisplayEffectsScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
