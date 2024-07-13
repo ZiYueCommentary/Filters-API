@@ -22,8 +22,6 @@ public class FiltersApiForge
     public FiltersApiForge() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         MinecraftForge.EVENT_BUS.register(this);
-        FilterBuilder.registerFilter(CreativeModeTab.TAB_FOOD, new TranslatableComponent("1"), () -> new ItemStack(Items.ACACIA_BOAT));
-        FilterBuilder.registerUncategorizedItemsFilter(CreativeModeTab.TAB_FOOD);
     }
 
     public void doClientStuff(final FMLClientSetupEvent event) {
