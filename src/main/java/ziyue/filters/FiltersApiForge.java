@@ -5,7 +5,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,8 +22,6 @@ public class FiltersApiForge
     public FiltersApiForge() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
         MinecraftForge.EVENT_BUS.register(this);
-        FilterBuilder.registerFilter(CreativeModeTab.TAB_FOOD, new TranslatableComponent("1"), () -> new ItemStack(Items.ACACIA_BOAT));
-        FilterBuilder.registerUncategorizedItemsFilter(CreativeModeTab.TAB_FOOD);
     }
 
     public void doClientStuff(final FMLClientSetupEvent event) {
@@ -31,7 +29,7 @@ public class FiltersApiForge
     }
 
     @SubscribeEvent
-    public void postScreenInit(final GuiScreenEvent.DrawScreenEvent.Post event) {
+    public void postScreenInit(final ScreenEvent.DrawScreenEvent.Post event) {
         if (itemsCategorized) return;
 
         AtomicInteger uncategorizedItems = new AtomicInteger(0);

@@ -32,7 +32,7 @@ public abstract class EffectRenderingInventoryScreenMixin<T extends AbstractCont
     }
 
     @Inject(at = @At("HEAD"), method = "renderEffects")
-    private void beforeRenderEffects(PoseStack p_98716_, CallbackInfo ci) {
+    private void beforeRenderEffects(PoseStack p_194015_, int p_194016_, int p_194017_, CallbackInfo ci) {
         final Screen screen = minecraft.getInstance().screen;
         if (screen instanceof CreativeModeInventoryScreen inventory) {
             if (FilterBuilder.isTabHasFilters(inventory.getSelectedTab())) {
@@ -42,7 +42,7 @@ public abstract class EffectRenderingInventoryScreenMixin<T extends AbstractCont
     }
 
     @Inject(at = @At("RETURN"), method = "renderEffects")
-    private void afterRenderEffects(PoseStack p_98716_, CallbackInfo ci) {
+    private void afterRenderEffects(PoseStack p_194015_, int p_194016_, int p_194017_, CallbackInfo ci) {
         final Screen screen = minecraft.getInstance().screen;
         if (screen instanceof CreativeModeInventoryScreen inventory) {
             if (FilterBuilder.isTabHasFilters(inventory.getSelectedTab())) {

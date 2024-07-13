@@ -81,6 +81,10 @@ public class Filter extends Button
         tesselator.end();
     }
 
+    public boolean isHovered() {
+        return this.isHovered;
+    }
+
     /**
      * Adding items to the filter.
      *

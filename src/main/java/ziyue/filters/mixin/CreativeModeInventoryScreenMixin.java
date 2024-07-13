@@ -6,8 +6,7 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +23,7 @@ import ziyue.filters.FilterList;
 import ziyue.filters.gui.IconButton;
 
 import java.util.Comparator;
-import java.util.Map;
+import java.util.Set;
 
 import static ziyue.filters.FiltersApi.ICONS;
 
@@ -40,15 +39,11 @@ import static ziyue.filters.FiltersApi.ICONS;
 @Mixin(CreativeModeInventoryScreen.class)
 public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingInventoryScreen<CreativeModeInventoryScreen.ItemPickerMenu>
 {
-    @Shadow
-    private static int selectedTab;
+    @Shadow @Final private Set<TagKey<Item>> visibleTags;
 
-    @Shadow
-    @Final
-    private Map<ResourceLocation, Tag<Item>> visibleTags;
+    @Shadow private static int selectedTab;
 
-    @Shadow
-    private float scrollOffs;
+    @Shadow private float scrollOffs;
 
     public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu p_98701_, Inventory p_98702_, Component p_98703_) {
         super(p_98701_, p_98702_, p_98703_);

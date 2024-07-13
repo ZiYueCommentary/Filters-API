@@ -42,4 +42,8 @@ public class IconButton extends Button
         RenderSystem.setShaderTexture(0, this.iconResource);
         this.blit(matrices, this.x + 2, this.y + 2, this.iconU, this.iconV, 16, 16);
     }
+
+    public boolean isHovered() {
+        return this.isHovered;
+    }
 }
