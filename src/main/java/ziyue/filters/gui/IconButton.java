@@ -22,25 +22,29 @@ public class IconButton extends Button
     protected int iconV;
 
     public IconButton(int x, int y, Component tooltip, OnPress onPress, ResourceLocation iconResource, int iconU, int iconV) {
-        super(x, y, 20, 20, tooltip, onPress, DEFAULT_NARRATION);
+        super(x, y, 20, 20, tooltip, onPress);
         this.iconResource = iconResource;
         this.iconU = iconU;
         this.iconV = iconV;
     }
 
     @Override
-    public void renderWidget(PoseStack matrices, int p_275505_, int p_275674_, float p_275696_) {
+    public void renderButton(PoseStack matrices, int p_275505_, int p_275674_, float p_275696_) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
         RenderSystem.setShaderColor(1f, 1f, 1f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        int offset = this.getYImage(this.isHovered());
-        blit(matrices, this.getX(), this.getY(), 0, 46 + offset * 20, this.width / 2, this.height);
-        blit(matrices, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
+        int offset = this.getYImage(this.isHovered);
+        blit(matrices, this.x, this.y, 0, 46 + offset * 20, this.width / 2, this.height);
+        blit(matrices, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
         RenderSystem.setShaderTexture(0, this.iconResource);
-        blit(matrices, this.getX() + 2, this.getY() + 2, this.iconU, this.iconV, 16, 16);
+        blit(matrices, this.x + 2, this.y + 2, this.iconU, this.iconV, 16, 16);
+    }
+
+    public boolean isHovered() {
+        return this.isHovered;
     }
 
     public int getYImage(boolean hovered) {
