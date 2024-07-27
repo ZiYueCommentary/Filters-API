@@ -3,6 +3,7 @@ package ziyue.filters;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -50,7 +51,12 @@ public class Filter extends Button
     }
 
     @Override
-    public void renderWidget(PoseStack matrices, int p_93658_, int p_93659_, float p_93660_) {
+    public void render(GuiGraphics p_282421_, int p_93658_, int p_93659_, float p_93660_) {
+        super.render(p_282421_, p_93658_, p_93659_, p_93660_);
+    }
+
+    @Override
+    public void renderWidget(GuiGraphics guiGraphics, int p_93658_, int p_93659_, float p_93660_) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
@@ -61,12 +67,10 @@ public class Filter extends Button
         int width = this.enabled ? 32 : 28;
         int textureX = 26;
         int textureY = this.enabled ? 32 : 0;
-        this.drawRotatedTexture(matrices.last().pose(), this.getX(), this.getY(), textureX, textureY, width);
+        this.drawRotatedTexture(guiGraphics.pose().last().pose(), this.getX(), this.getY(), textureX, textureY, width);
 
-        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
-        renderer.renderGuiItem(matrices, icon.get(), this.getX() + 8, this.getY() + 4);
+        guiGraphics.renderItem(icon.get(), this.getX() + 8, this.getY() + 4);
     }
-
 
     protected void drawRotatedTexture(Matrix4f pose, int x, int y, int textureX, int textureY, int width) {
         float scaleX = 0.00390625F;

@@ -1,7 +1,7 @@
 package ziyue.filters.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,21 +45,18 @@ import static ziyue.filters.FiltersApi.ICONS;
 @Mixin(CreativeModeInventoryScreen.class)
 public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingInventoryScreen<CreativeModeInventoryScreen.ItemPickerMenu>
 {
+    @Shadow private static CreativeModeTab selectedTab;
+    @Shadow @Final private Set<TagKey<Item>> visibleTags;
+    @Shadow private float scrollOffs;
     @Unique
     private static boolean filters$itemsCategorized = false;
-
-    @Shadow private static CreativeModeTab selectedTab;
-
-    @Shadow @Final private Set<TagKey<Item>> visibleTags;
-
-    @Shadow private float scrollOffs;
 
     public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu p_98701_, Inventory p_98702_, Component p_98703_) {
         super(p_98701_, p_98702_, p_98703_);
     }
 
     @Inject(at = @At("TAIL"), method = "<init>")
-    protected void afterInit(Player p_259788_, FeatureFlagSet p_260074_, boolean p_259569_, CallbackInfo ci){
+    protected void afterInit(Player p_259788_, FeatureFlagSet p_260074_, boolean p_259569_, CallbackInfo ci) {
         if (!filters$itemsCategorized) {
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
@@ -95,7 +92,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     }
 
     @Inject(at = @At("HEAD"), method = "render")
-    protected void beforeRender(PoseStack p_98577_, int p_98578_, int p_98579_, float p_98580_, CallbackInfo ci) {
+    protected void beforeRender(GuiGraphics p_283000_, int p_281317_, int p_282770_, float p_281295_, CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter1) -> filtersApi$showButtons(filter1, false));
         FilterBuilder.FILTERS.forEach((map, filter) -> filter.forEach(button -> button.visible = false));
 
@@ -115,24 +112,24 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     }
 
     @Inject(at = @At("TAIL"), method = "render")
-    protected void afterRender(PoseStack matrices, int mouseX, int mouseY, float p_98580_, CallbackInfo ci) {
+    protected void afterRender(GuiGraphics guiGraphics, int mouseX, int mouseY, float p_281295_, CallbackInfo ci) {
         if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
         FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
         if (filter.btnScrollUp.isHovered())
-            this.renderTooltip(matrices, filter.btnScrollUp.getMessage(), mouseX, mouseY);
+            guiGraphics.renderTooltip(this.font, filter.btnScrollUp.getMessage(), mouseX, mouseY);
         if (filter.btnScrollDown.isHovered())
-            this.renderTooltip(matrices, filter.btnScrollDown.getMessage(), mouseX, mouseY);
+            guiGraphics.renderTooltip(this.font, filter.btnScrollDown.getMessage(), mouseX, mouseY);
         if (filter.btnEnableAll.isHovered())
-            this.renderTooltip(matrices, filter.btnEnableAll.getMessage(), mouseX, mouseY);
+            guiGraphics.renderTooltip(this.font, filter.btnEnableAll.getMessage(), mouseX, mouseY);
         if (filter.btnDisableAll.isHovered())
-            this.renderTooltip(matrices, filter.btnDisableAll.getMessage(), mouseX, mouseY);
+            guiGraphics.renderTooltip(this.font, filter.btnDisableAll.getMessage(), mouseX, mouseY);
         if (filter.btnReserved != null && filter.btnReserved.isHovered() && filter.btnReservedTooltip != null) {
-            this.renderTooltip(matrices, filter.btnReservedTooltip, mouseX, mouseY);
+            guiGraphics.renderTooltip(this.font, filter.btnReservedTooltip, mouseX, mouseY);
         }
 
         filter.forEach(filter1 -> {
-            if (filter1.isHovered()) this.renderTooltip(matrices, filter1.getMessage(), mouseX, mouseY);
+            if (filter1.isHovered()) guiGraphics.renderTooltip(this.font, filter1.getMessage(), mouseX, mouseY);
         });
     }
 

@@ -1,7 +1,10 @@
 package ziyue.filters;
 
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -28,6 +31,16 @@ public class FilterBuilder
     public static final HashMap<CreativeModeTab, FilterList> FILTERS = new HashMap<>();
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerFilter(CreativeModeTab, Component, Supplier)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
+        return FilterBuilder.registerFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
+    }
+
+    /**
      * Register a filter for specific creative mode tab.
      *
      * @param creativeModeTab specific creative mode tab
@@ -46,6 +59,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerUncategorizedItemsFilter(CreativeModeTab)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab) {
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));
+    }
+
+    /**
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
      * @since 1.0.0
@@ -59,6 +82,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerUncategorizedItemsFilter(CreativeModeTab, Supplier)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Supplier<ItemStack> filterIcon) {
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterIcon);
+    }
+
+    /**
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
      * @since 1.0.0
@@ -69,6 +102,16 @@ public class FilterBuilder
         filterList.uncategorizedItems = filter;
         FILTERS.put(creativeModeTab, filterList);
         return filter;
+    }
+
+    /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
     }
 
     /**
@@ -91,6 +134,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress)
+     * @since 1.0.0+1.20.1
+     */
+    public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress) {
+        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, FiltersApi.ICONS, 64, 0);
+    }
+
+    /**
      * @author ZiYueCommentary
      * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation, int, int)
      * @since 1.0.0
@@ -100,14 +153,22 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation, int, int)
+     * @since 1.0.0+1.20.1
+     */
+    public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon, int iconU, int iconV) {
+        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, icon, iconU, iconV);
+    }
+
+    /**
      * Configure the third button on the left.
      *
      * @param creativeModeTab specific creative mode tab
      * @param tooltip         Component when hovering the button
      * @param onPress         function when clicking the button, set this as null to make the button invisible
      * @param icon            the icon of the button
-     * @param iconU           iconU of the icon
-     * @param iconV           iconV of the icon
      * @author ZiYueCommentary
      * @since 1.0.0
      */
@@ -118,6 +179,16 @@ public class FilterBuilder
         filters.btnReservedIcon = icon;
         filters.btnReservedIconU = iconU;
         filters.btnReservedIconV = iconV;
+    }
+
+    /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #filtersVisibility(CreativeModeTab, boolean)
+     * @since 1.0.0+1.20.1
+     */
+    public static void filtersVisibility(ResourceKey<CreativeModeTab> creativeModeTab, boolean visible) {
+        FilterBuilder.filtersVisibility(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), visible);
     }
 
     /**
@@ -134,6 +205,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #isItemCategorized(CreativeModeTab, Item)
+     * @since 1.0.0+1.20.1
+     */
+    public static boolean isItemCategorized(ResourceKey<CreativeModeTab> creativeModeTab, Item item) {
+        return FilterBuilder.isItemCategorized(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), item);
+    }
+
+    /**
      * Check whether the item is categorized in specific creative mode tab.
      *
      * @param creativeModeTab the creative mode tab
@@ -147,6 +228,16 @@ public class FilterBuilder
             if (filter.items.contains(item)) return true;
         }
         return false;
+    }
+
+    /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #isTabHasFilters(CreativeModeTab)
+     * @since 1.0.0+1.20.1
+     */
+    public static boolean isTabHasFilters(ResourceKey<CreativeModeTab> creativeModeTab) {
+        return FilterBuilder.isTabHasFilters(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));
     }
 
     /**

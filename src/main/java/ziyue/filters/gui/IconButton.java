@@ -2,6 +2,7 @@ package ziyue.filters.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -29,28 +30,30 @@ public class IconButton extends Button
     }
 
     @Override
-    public void renderWidget(PoseStack matrices, int p_275505_, int p_275674_, float p_275696_) {
+    public void renderWidget(GuiGraphics guiGraphics, int p_93658_, int p_93659_, float p_93660_) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
         RenderSystem.setShaderColor(1f, 1f, 1f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        int offset = this.getYImage(this.isHovered());
-        blit(matrices, this.getX(), this.getY(), 0, 46 + offset * 20, this.width / 2, this.height);
-        blit(matrices, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
-        RenderSystem.setShaderTexture(0, this.iconResource);
-        blit(matrices, this.getX() + 2, this.getY() + 2, this.iconU, this.iconV, 16, 16);
+        guiGraphics.blitNineSliced(WIDGETS_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
+        guiGraphics.blit(this.iconResource, this.getX() + 2, this.getY() + 2, this.iconU, this.iconV, 16, 16);
     }
 
-    public int getYImage(boolean hovered) {
+    @Override
+    public boolean isFocused() {
+        return false;
+    }
+
+    public int getTextureY() {
         int i = 1;
         if (!this.active) {
             i = 0;
-        } else if (hovered) {
+        } else if (this.isHoveredOrFocused()) {
             i = 2;
         }
 
-        return i;
+        return 46 + i * 20;
     }
 }
