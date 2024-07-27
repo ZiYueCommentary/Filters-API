@@ -8,7 +8,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -89,10 +88,10 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     @Inject(at = @At("TAIL"), method = "init")
     protected void afterInit(CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter) -> {
-            filter.btnScrollUp = new IconButton(this.x - 22, this.y - 12, new TranslatableText("button.filters.scroll_up").formatted(Formatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
-            filter.btnScrollDown = new IconButton(this.x - 22, this.y + 127, new TranslatableText("button.filters.scroll_down").formatted(Formatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
-            filter.btnEnableAll = new IconButton(this.x - 50, this.y + 10, new TranslatableText("button.filters.enable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
-            filter.btnDisableAll = new IconButton(this.x - 50, this.y + 32, new TranslatableText("button.filters.disable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
+            filter.btnScrollUp = new IconButton(this.x - 22, this.y - 12, Text.translatable("button.filters.scroll_up").formatted(Formatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
+            filter.btnScrollDown = new IconButton(this.x - 22, this.y + 127, Text.translatable("button.filters.scroll_down").formatted(Formatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
+            filter.btnEnableAll = new IconButton(this.x - 50, this.y + 10, Text.translatable("button.filters.enable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
+            filter.btnDisableAll = new IconButton(this.x - 50, this.y + 32, Text.translatable("button.filters.disable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
             if (filter.btnReservedOnPress != null) {
                 filter.btnReserved = new IconButton(this.x - 50, this.y + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
                 this.addDrawableChild(filter.btnReserved);

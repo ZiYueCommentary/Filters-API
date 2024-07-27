@@ -6,7 +6,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab) {
-        Filter filter = new Filter(new TranslatableText("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
+        Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getIndex(), FilterList.empty());
         filterList.uncategorizedItems = filter;
         FILTERS.put(creativeModeTab.getIndex(), filterList);
@@ -65,7 +64,7 @@ public class FilterBuilder
      * @since 1.0.0
      */
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Supplier<ItemStack> filterIcon) {
-        Filter filter = new Filter(new TranslatableText("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
+        Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab.getIndex(), FilterList.empty());
         filterList.uncategorizedItems = filter;
         FILTERS.put(creativeModeTab.getIndex(), filterList);
