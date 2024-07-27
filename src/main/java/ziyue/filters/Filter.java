@@ -1,12 +1,13 @@
 package ziyue.filters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -33,7 +34,8 @@ import java.util.function.Supplier;
 
 public class Filter extends Button
 {
-    public static final ResourceLocation CREATIVE_TABS_LOCATION = new ResourceLocation("textures/gui/container/creative_inventory/tabs.png");
+    public static final ResourceLocation TAB_SELECTED = new ResourceLocation("textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png");
+    public static final ResourceLocation TAB_UNSELECTED = new ResourceLocation("textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png");
 
     public Supplier<ItemStack> icon;
     public final List<Item> items;
@@ -51,14 +53,9 @@ public class Filter extends Button
     }
 
     @Override
-    public void render(GuiGraphics p_282421_, int p_93658_, int p_93659_, float p_93660_) {
-        super.render(p_282421_, p_93658_, p_93659_, p_93660_);
-    }
-
-    @Override
     public void renderWidget(GuiGraphics guiGraphics, int p_93658_, int p_93659_, float p_93660_) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
+        RenderSystem.setShaderTexture(0, enabled ? TAB_SELECTED : TAB_UNSELECTED);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -73,8 +70,8 @@ public class Filter extends Button
     }
 
     protected void drawRotatedTexture(Matrix4f pose, int x, int y, int textureX, int textureY, int width) {
-        float scaleX = 0.00390625F;
-        float scaleY = 0.00390625F;
+        final float scaleX = 0.038524330F;
+        final float scaleY = 0.031324208F;
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.getBuilder();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
