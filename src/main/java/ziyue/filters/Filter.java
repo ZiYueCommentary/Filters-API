@@ -2,9 +2,11 @@ package ziyue.filters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -48,7 +50,7 @@ public class Filter extends ButtonWidget
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
@@ -59,10 +61,8 @@ public class Filter extends ButtonWidget
         int width = this.enabled ? 32 : 28;
         int textureX = 26;
         int textureY = this.enabled ? 32 : 0;
-        this.drawRotatedTexture(matrices.peek().getPositionMatrix(), this.getX(), this.getY(), textureX, textureY, width);
-
-        ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
-        renderer.renderGuiItemIcon(matrices, icon.get(), this.getX() + 8, this.getY() + 4);
+        this.drawRotatedTexture(context.getMatrices().peek().getPositionMatrix(), this.getX(), this.getY(), textureX, textureY, width);
+        context.drawItem(icon.get(), this.getX() + 8, this.getY() + 4);
     }
 
 

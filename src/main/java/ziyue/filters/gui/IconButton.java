@@ -1,9 +1,8 @@
 package ziyue.filters.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -29,18 +28,18 @@ public class IconButton extends ButtonWidget
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
-        RenderSystem.setShaderColor(1f, 1f, 1f, this.alpha);
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float partialTicks) {
+        context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        int offset = this.getYImage(this.isHovered());
-        drawTexture(matrices, this.getX(), this.getY(), 0, 46 + offset * 20, this.width / 2, this.height);
-        drawTexture(matrices, this.getX() + this.width / 2, this.getY(), 200 - this.width / 2, 46 + offset * 20, this.width / 2, this.height);
-        RenderSystem.setShaderTexture(0, this.iconResource);
-        drawTexture(matrices, this.getX() + 2, this.getY() + 2, this.iconU, this.iconV, 16, 16);
+        context.drawNineSlicedTexture(WIDGETS_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getYImage(this.isHovered()));
+        context.drawTexture(this.iconResource, this.getX() + 2, this.getY() + 2, iconU, iconV, 16, 16);
+    }
+
+    @Override
+    public boolean isSelected() {
+        return false;
     }
 
     public int getYImage(boolean hovered) {
@@ -51,6 +50,6 @@ public class IconButton extends ButtonWidget
             i = 2;
         }
 
-        return i;
+        return 46 + i * 20;
     }
 }

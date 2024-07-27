@@ -5,6 +5,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -28,6 +30,16 @@ public class FilterBuilder
     public static final HashMap<ItemGroup, FilterList> FILTERS = new HashMap<>();
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerFilter(ItemGroup, Text, Supplier)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerFilter(RegistryKey<ItemGroup> creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
+        return FilterBuilder.registerFilter(Registries.ITEM_GROUP.get(creativeModeTab), filterName, filterIcon);
+    }
+
+    /**
      * Register a filter for specific creative mode tab.
      *
      * @param creativeModeTab specific creative mode tab
@@ -46,6 +58,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerUncategorizedItemsFilter(ItemGroup)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerUncategorizedItemsFilter(RegistryKey<ItemGroup> creativeModeTab) {
+        return FilterBuilder.registerUncategorizedItemsFilter(Registries.ITEM_GROUP.get(creativeModeTab));
+    }
+
+    /**
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
      * @since 1.0.0
@@ -59,6 +81,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerUncategorizedItemsFilter(ItemGroup, Supplier)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerUncategorizedItemsFilter(RegistryKey<ItemGroup> creativeModeTab, Supplier<ItemStack> filterIcon) {
+        return FilterBuilder.registerUncategorizedItemsFilter(Registries.ITEM_GROUP.get(creativeModeTab), filterIcon);
+    }
+
+    /**
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
      * @since 1.0.0
@@ -69,6 +101,16 @@ public class FilterBuilder
         filterList.uncategorizedItems = filter;
         FILTERS.put(creativeModeTab, filterList);
         return filter;
+    }
+
+    /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
+     * @since 1.0.0+1.20.1
+     */
+    public static Filter registerUncategorizedItemsFilter(RegistryKey<ItemGroup> creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
+        return FilterBuilder.registerUncategorizedItemsFilter(Registries.ITEM_GROUP.get(creativeModeTab), filterName, filterIcon);
     }
 
     /**
@@ -91,6 +133,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #setReservedButton(ItemGroup, Text, ButtonWidget.PressAction)
+     * @since 1.0.0+1.20.1
+     */
+    public static void setReservedButton(RegistryKey<ItemGroup> creativeModeTab, Text tooltip, ButtonWidget.PressAction onPress) {
+        FilterBuilder.setReservedButton(Registries.ITEM_GROUP.get(creativeModeTab), tooltip, onPress, FiltersApi.ICONS, 64, 0);
+    }
+
+    /**
      * @author ZiYueCommentary
      * @see #setReservedButton(ItemGroup, Text, ButtonWidget.PressAction, Identifier, int, int)
      * @since 1.0.0
@@ -100,14 +152,22 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #setReservedButton(ItemGroup, Text, ButtonWidget.PressAction, Identifier, int, int)
+     * @since 1.0.0+1.20.1
+     */
+    public static void setReservedButton(RegistryKey<ItemGroup> creativeModeTab, Text tooltip, ButtonWidget.PressAction onPress, Identifier icon, int iconU, int iconV) {
+        FilterBuilder.setReservedButton(Registries.ITEM_GROUP.get(creativeModeTab), tooltip, onPress, icon, iconU, iconV);
+    }
+
+    /**
      * Configure the third button on the left.
      *
      * @param creativeModeTab specific creative mode tab
      * @param tooltip         text when hovering the button
      * @param onPress         function when clicking the button, set this as null to make the button invisible
      * @param icon            the icon of the button
-     * @param iconU           iconU of the icon
-     * @param iconV           iconV of the icon
      * @author ZiYueCommentary
      * @since 1.0.0
      */
@@ -118,6 +178,16 @@ public class FilterBuilder
         filters.btnReservedIcon = icon;
         filters.btnReservedIconU = iconU;
         filters.btnReservedIconV = iconV;
+    }
+
+    /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #filtersVisibility(ItemGroup, boolean)
+     * @since 1.0.0+1.20.1
+     */
+    public static void filtersVisibility(RegistryKey<ItemGroup> creativeModeTab, boolean visible) {
+        FilterBuilder.filtersVisibility(Registries.ITEM_GROUP.get(creativeModeTab), visible);
     }
 
     /**
@@ -134,6 +204,16 @@ public class FilterBuilder
     }
 
     /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #isItemCategorized(ItemGroup, Item)
+     * @since 1.0.0+1.20.1
+     */
+    public static boolean isItemCategorized(RegistryKey<ItemGroup> creativeModeTab, Item item) {
+        return FilterBuilder.isItemCategorized(Registries.ITEM_GROUP.get(creativeModeTab), item);
+    }
+
+    /**
      * Check whether the item is categorized in specific creative mode tab.
      *
      * @param creativeModeTab the creative mode tab
@@ -147,6 +227,16 @@ public class FilterBuilder
             if (filter.items.contains(item)) return true;
         }
         return false;
+    }
+
+    /**
+     * @param creativeModeTab specific vanilla creative mode tab
+     * @author ZiYueCommentary
+     * @see #isTabHasFilters(ItemGroup)
+     * @since 1.0.0+1.20.1
+     */
+    public static boolean isTabHasFilters(RegistryKey<ItemGroup> creativeModeTab) {
+        return FilterBuilder.isTabHasFilters(Registries.ITEM_GROUP.get(creativeModeTab));
     }
 
     /**
