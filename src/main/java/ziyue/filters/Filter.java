@@ -1,13 +1,9 @@
 package ziyue.filters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -32,7 +28,8 @@ import java.util.function.Supplier;
 
 public class Filter extends ButtonWidget
 {
-    public static final Identifier CREATIVE_TABS_LOCATION = new Identifier("textures/gui/container/creative_inventory/tabs.png");
+    public static final Identifier TAB_SELECTED = new Identifier("textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png");
+    public static final Identifier TAB_UNSELECTED = new Identifier("textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png");
 
     public Supplier<ItemStack> icon;
     public final List<Item> items;
@@ -52,7 +49,7 @@ public class Filter extends ButtonWidget
     @Override
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, CREATIVE_TABS_LOCATION);
+        RenderSystem.setShaderTexture(0, enabled ? TAB_SELECTED : TAB_UNSELECTED);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -67,8 +64,8 @@ public class Filter extends ButtonWidget
 
 
     protected void drawRotatedTexture(Matrix4f pose, int x, int y, int textureX, int textureY, int width) {
-        float scaleX = 0.00390625F;
-        float scaleY = 0.00390625F;
+        final float scaleX = 0.038524330F;
+        final float scaleY = 0.031324208F;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
