@@ -2,6 +2,7 @@ package ziyue.filters.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -16,6 +17,8 @@ import net.minecraft.util.Identifier;
 
 public class IconButton extends ButtonWidget
 {
+    public static final ButtonTextures TEXTURES = new ButtonTextures(new Identifier("widget/button"), new Identifier("widget/button_disabled"), new Identifier("widget/button_highlighted"));
+
     protected Identifier iconResource;
     protected int iconU;
     protected int iconV;
@@ -28,28 +31,17 @@ public class IconButton extends ButtonWidget
     }
 
     @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float partialTicks) {
+    protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        context.drawNineSlicedTexture(WIDGETS_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getYImage(this.isHovered()));
+        context.drawGuiTexture(TEXTURES.get(this.active, this.isSelected()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
         context.drawTexture(this.iconResource, this.getX() + 2, this.getY() + 2, iconU, iconV, 16, 16);
     }
 
     @Override
     public boolean isSelected() {
         return false;
-    }
-
-    public int getYImage(boolean hovered) {
-        int i = 1;
-        if (!this.active) {
-            i = 0;
-        } else if (hovered) {
-            i = 2;
-        }
-
-        return 46 + i * 20;
     }
 }
