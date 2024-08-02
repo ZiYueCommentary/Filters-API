@@ -28,8 +28,8 @@ import java.util.function.Supplier;
 
 public class Filter extends ButtonWidget
 {
-    public static final Identifier TAB_SELECTED = new Identifier("textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png");
-    public static final Identifier TAB_UNSELECTED = new Identifier("textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png");
+    public static final Identifier TAB_SELECTED = Identifier.ofVanilla("textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png");
+    public static final Identifier TAB_UNSELECTED = Identifier.ofVanilla("textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png");
 
     public Supplier<ItemStack> icon;
     public final List<Item> items;
@@ -55,20 +55,19 @@ public class Filter extends ButtonWidget
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         this.drawRotatedTexture(context.getMatrices().peek().getPositionMatrix(), this.getX(), this.getY(), this.enabled ? 32 : 28);
-        context.drawItem(icon.get(), this.getX() + 8, this.getY() + 4);
+        context.drawItem(icon.get(), this.getX() + 8, this.getY() + 5);
     }
 
     protected void drawRotatedTexture(Matrix4f pose, int x, int y, int width) {
         final float scaleX = 0.038524330F;
         final float scaleY = 0.031324208F;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(pose, x, y + height, 0).texture(((float) height * scaleX), 0).next();
-        bufferBuilder.vertex(pose, x + width, y + height, 0).texture(((float) height * scaleX), ((float) width * scaleY)).next();
-        bufferBuilder.vertex(pose, x + width, y, 0).texture(0, ((float) width * scaleY)).next();
-        bufferBuilder.vertex(pose, x, y, 0).texture(0, 0).next();
-        tessellator.draw();
+        BufferBuilder bufferBuilder = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(pose, x, y + height, 0).texture(((float) height * scaleX), 0);
+        bufferBuilder.vertex(pose, x + width, y + height, 0).texture(((float) height * scaleX), ((float) width * scaleY));
+        bufferBuilder.vertex(pose, x + width, y, 0).texture(0, ((float) width * scaleY));
+        bufferBuilder.vertex(pose, x, y, 0).texture(0, 0);
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
 
     /**
