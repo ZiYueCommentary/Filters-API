@@ -1,15 +1,14 @@
 package ziyue.filters.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -60,7 +59,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     }
 
     @Inject(at = @At("TAIL"), method = "<init>")
-    protected void afterInit(Player p_259788_, FeatureFlagSet p_260074_, boolean p_259569_, CallbackInfo ci){
+    protected void afterInit(LocalPlayer p_344408_, FeatureFlagSet p_260074_, boolean p_259569_, CallbackInfo ci){
         if (!filters$itemsCategorized) {
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
