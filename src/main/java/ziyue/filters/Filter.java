@@ -1,10 +1,7 @@
 package ziyue.filters;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
@@ -32,8 +29,8 @@ import java.util.function.Supplier;
 
 public class Filter extends Button
 {
-    public static final ResourceLocation TAB_SELECTED = new ResourceLocation("textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png");
-    public static final ResourceLocation TAB_UNSELECTED = new ResourceLocation("textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png");
+    public static final ResourceLocation TAB_SELECTED = ResourceLocation.withDefaultNamespace("textures/gui/sprites/container/creative_inventory/tab_top_selected_2.png");
+    public static final ResourceLocation TAB_UNSELECTED = ResourceLocation.withDefaultNamespace("textures/gui/sprites/container/creative_inventory/tab_top_unselected_2.png");
 
     public Supplier<ItemStack> icon;
     public final List<Item> items;
@@ -71,13 +68,12 @@ public class Filter extends Button
         final float scaleX = 0.038524330F;
         final float scaleY = 0.031324208F;
         Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferBuilder = tesselator.getBuilder();
-        bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferBuilder.vertex(pose, x, y + height, 0f).uv(((float) (textureX + height) * scaleX), ((float) (textureY) * scaleY)).endVertex();
-        bufferBuilder.vertex(pose, x + width, y + height, 0f).uv(((float) (textureX + height) * scaleX), ((float) (textureY + width) * scaleY)).endVertex();
-        bufferBuilder.vertex(pose, x + width, y, 0f).uv(((float) (textureX) * scaleX), ((float) (textureY + width) * scaleY)).endVertex();
-        bufferBuilder.vertex(pose, x, y, 0f).uv(((float) (textureX) * scaleX), ((float) (textureY) * scaleY)).endVertex();
-        tesselator.end();
+        BufferBuilder bufferBuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferBuilder.addVertex(pose, x, y + height, 0).setUv(((float) height * scaleX), 0);
+        bufferBuilder.addVertex(pose, x + width, y + height, 0).setUv(((float) height * scaleX), ((float) width * scaleY));
+        bufferBuilder.addVertex(pose, x + width, y, 0).setUv(0, ((float) width * scaleY));
+        bufferBuilder.addVertex(pose, x, y, 0).setUv(0, 0);
+        BufferUploader.drawWithShader(bufferBuilder.buildOrThrow());
     }
 
     /**

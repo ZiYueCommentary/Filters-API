@@ -18,5 +18,5 @@ public class FiltersApi
 {
     public static final String MOD_ID = "filters";
     public static final Logger LOGGER = LogManager.getLogger("Filters API");
-    public static final ResourceLocation ICONS = new ResourceLocation(FiltersApi.MOD_ID, "textures/gui/filters.png");
+    public static final ResourceLocation ICONS = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "textures/gui/filters.png");
 }
