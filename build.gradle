@@ -1,0 +1,116 @@
+plugins {
+    id 'java-library'
+    id 'eclipse'
+    id 'idea'
+    id 'maven-publish'
+    id 'net.neoforged.gradle.userdev' version '7.0.157'
+    id "de.undercouch.download" version "4.1.2"
+}
+
+version = mod_version
+group = maven_group
+
+repositories {
+    mavenLocal()
+}
+
+base {
+    archivesName = mod_id
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+}
+
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+
+        modSource project.sourceSets.main
+    }
+
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+
+    data {
+        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+afterEvaluate {
+    download {
+        src "https://weblate.ziyuesinicization.site/api/components/filters-api/en_us-json/file/"
+        dest "lang.zip"
+        overwrite true
+        retries - 1
+    }
+    copy {
+        from(zipTree("lang.zip"))
+        into "temp_lang"
+    }
+    copy {
+        from "temp_lang/filters-api/en_us-json/"
+        into "/"
+    }
+    delete("lang.zip", "temp_lang")
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neo_version}"
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version + "+" + minecraft_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+publishing {
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = archives_base_name + "-neoforge"
+            version = mod_version + "+" + minecraft_version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            url = "https://maven.ziyuesinicization.site/releases/"
+            credentials {
+                username = "ZiYueCommentary"
+                password = System.getenv("MAVEN_PASS")
+            }
+        }
+    }}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}

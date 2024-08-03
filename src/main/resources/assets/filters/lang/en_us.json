@@ -1,0 +1,8 @@
+{
+    "modmenu.descriptionTranslation.filters": "A library that provides a filtering system to categorize your mod's creative tab.",
+    "button.filters.scroll_up": "Scroll Up",
+    "button.filters.scroll_down": "Scroll Down",
+    "button.filters.enable_all": "Enable All Filters",
+    "button.filters.disable_all": "Disable All Filters",
+    "filter.filters.uncategorized": "Uncategorized"
+}
