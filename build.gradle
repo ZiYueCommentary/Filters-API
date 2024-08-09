@@ -27,6 +27,7 @@ base {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
 }
 
 minecraft {
@@ -138,6 +139,12 @@ afterEvaluate {
         into "/"
     }
     delete("lang.zip", "temp_lang")
+}
+
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
 }
 
 publishing {
