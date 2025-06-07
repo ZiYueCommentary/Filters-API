@@ -59,13 +59,13 @@ public class Filter extends ButtonWidget
         int textureX = 26;
         int textureY = this.enabled ? 32 : 0;
         this.drawRotatedTexture(context.getMatrices().peek().getPositionMatrix(), this.getX(), this.getY(), textureX, textureY, width);
-        context.drawItem(icon.get(), this.getX() + 8, this.getY() + 4);
+        context.drawItem(icon.get(), this.getX() + 8, this.getY() + 5);
     }
 
 
     protected void drawRotatedTexture(Matrix4f pose, int x, int y, int textureX, int textureY, int width) {
         final float scaleX = 0.038524330F;
-        final float scaleY = 0.031324208F;
+        final float scaleY = 0.031224208F;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);

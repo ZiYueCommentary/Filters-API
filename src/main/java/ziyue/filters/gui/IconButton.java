@@ -42,6 +42,6 @@ public class IconButton extends ButtonWidget
 
     @Override
     public boolean isSelected() {
-        return false;
+        return this.isHovered();
     }
 }

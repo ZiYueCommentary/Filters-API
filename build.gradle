@@ -37,6 +37,7 @@ tasks.withType(JavaCompile).configureEach {
 
 java {
 	withSourcesJar()
+    withJavadocJar()
 
 	sourceCompatibility = JavaVersion.VERSION_16
 	targetCompatibility = JavaVersion.VERSION_16
@@ -70,8 +71,19 @@ publishing {
 			artifactId = project.archives_base_name + "-fabric"
             version = project.mod_version + "+" + project.minecraft_version
 			from components.java
+
+            pom.withXml {
+                def dependenciesNode = asNode().get('dependencies')
+                if (dependenciesNode) {
+                    dependenciesNode*.parent()*.remove(dependenciesNode)
+                }
+            }
 		}
 	}
+
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        enabled = false
+    }
 
 	repositories {
         maven {
