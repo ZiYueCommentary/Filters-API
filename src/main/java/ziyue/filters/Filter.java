@@ -66,12 +66,12 @@ public class Filter extends Button
         int textureY = this.enabled ? 32 : 0;
         this.drawRotatedTexture(guiGraphics.pose().last().pose(), this.getX(), this.getY(), textureX, textureY, width);
 
-        guiGraphics.renderItem(icon.get(), this.getX() + 8, this.getY() + 4);
+        guiGraphics.renderItem(icon.get(), this.getX() + 8, this.getY() + 5);
     }
 
     protected void drawRotatedTexture(Matrix4f pose, int x, int y, int textureX, int textureY, int width) {
         final float scaleX = 0.038524330F;
-        final float scaleY = 0.031324208F;
+        final float scaleY = 0.031224208F;
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.getBuilder();
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);

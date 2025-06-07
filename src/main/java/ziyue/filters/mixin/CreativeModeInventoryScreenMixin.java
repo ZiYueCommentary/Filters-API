@@ -2,6 +2,7 @@ package ziyue.filters.mixin;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,9 +46,13 @@ import static ziyue.filters.FiltersApi.ICONS;
 @Mixin(CreativeModeInventoryScreen.class)
 public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingInventoryScreen<CreativeModeInventoryScreen.ItemPickerMenu>
 {
-    @Shadow private static CreativeModeTab selectedTab;
-    @Shadow @Final private Set<TagKey<Item>> visibleTags;
-    @Shadow private float scrollOffs;
+    @Shadow
+    private static CreativeModeTab selectedTab;
+    @Shadow
+    @Final
+    private Set<TagKey<Item>> visibleTags;
+    @Shadow
+    private float scrollOffs;
     @Unique
     private static boolean filters$itemsCategorized = false;
 
