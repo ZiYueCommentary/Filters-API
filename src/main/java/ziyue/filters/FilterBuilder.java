@@ -38,7 +38,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static Filter registerFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
-        return FilterBuilder.registerFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
+        return FilterBuilder.registerFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), filterName, filterIcon);
     }
 
     /**
@@ -66,7 +66,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab) {
-        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value());
     }
 
     /**
@@ -89,7 +89,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Supplier<ItemStack> filterIcon) {
-        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterIcon);
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), filterIcon);
     }
 
     /**
@@ -112,7 +112,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
-        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), filterName, filterIcon);
     }
 
     /**
@@ -141,7 +141,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress) {
-        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, ICON_WRENCH);
+        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), tooltip, onPress, ICON_WRENCH);
     }
 
     /**
@@ -160,7 +160,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon) {
-        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, icon);
+        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), tooltip, onPress, icon);
     }
 
     /**
@@ -187,7 +187,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static void filtersVisibility(ResourceKey<CreativeModeTab> creativeModeTab, boolean visible) {
-        FilterBuilder.filtersVisibility(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), visible);
+        FilterBuilder.filtersVisibility(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), visible);
     }
 
     /**
@@ -210,7 +210,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static boolean isItemCategorized(ResourceKey<CreativeModeTab> creativeModeTab, Item item) {
-        return FilterBuilder.isItemCategorized(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), item);
+        return FilterBuilder.isItemCategorized(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), item);
     }
 
     /**
@@ -236,7 +236,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.6
      */
     public static boolean isTabHasFilters(ResourceKey<CreativeModeTab> creativeModeTab) {
-        return FilterBuilder.isTabHasFilters(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));
+        return FilterBuilder.isTabHasFilters(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value());
     }
 
     /**

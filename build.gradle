@@ -141,6 +141,18 @@ afterEvaluate {
     delete("lang.zip", "temp_lang")
 }
 
+tasks.register('printGroup') {
+    doLast { println project.group }
+}
+
+tasks.register('printArtifact') {
+    doLast { println(project.archives_base_name + "-fabric") }
+}
+
+tasks.register('printVersion') {
+    doLast { println(project.mod_version + "+" + project.minecraft_version) }
+}
+
 sourceSets.each {
     def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
     it.output.resourcesDir = dir
@@ -157,12 +169,6 @@ publishing {
     }
 
     repositories {
-        maven {
-            url = "https://maven.ziyuesinicization.site/releases/"
-            credentials {
-                username = "ZiYueCommentary"
-                password = System.getenv("MAVEN_PASS")
-            }
-        }
+        mavenLocal()
     }
 }

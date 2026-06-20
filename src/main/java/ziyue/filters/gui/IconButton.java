@@ -1,9 +1,9 @@
 package ziyue.filters.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -28,11 +28,7 @@ public class IconButton extends Button
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int p_282682_, int p_281714_, float p_282542_) {
-        graphics.setColor(1.0f, 1.0f, 1.0f, this.alpha);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
-        graphics.blitSprite(SPRITES.get(this.active, this.isHovered), this.getX(), this.getY(), this.width, this.height);
-        graphics.blitSprite(this.iconResource, this.getX() + 2, this.getY() + 2, 16, 16);
+        graphics.blitSprite(RenderType::guiTextured, SPRITES.get(this.active, this.isHovered), this.getX(), this.getY(), this.width, this.height);
+        graphics.blitSprite(RenderType::guiTextured, iconResource, this.getX() + 2, this.getY() + 2, 16, 16);
     }
 }

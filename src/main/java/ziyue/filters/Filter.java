@@ -4,14 +4,13 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.CoreShaders;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
 import ziyue.filters.mixin.CreativeModeInventoryScreenMixin;
-import ziyue.filters.mixin.EffectRenderingInventoryScreenMixin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.function.Supplier;
  *
  * @author ZiYueCommentary
  * @see CreativeModeInventoryScreenMixin
- * @see EffectRenderingInventoryScreenMixin
  * @see FilterBuilder
  * @since 1.0.0
  */
@@ -52,7 +50,7 @@ public class Filter extends Button
 
     @Override
     public void renderWidget(GuiGraphics graphics, int p_93658_, int p_93659_, float p_93660_) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(CoreShaders.POSITION_TEX);
         RenderSystem.setShaderTexture(0, enabled ? TAB_SELECTED : TAB_UNSELECTED);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();

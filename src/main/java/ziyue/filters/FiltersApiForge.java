@@ -1,5 +1,8 @@
 package ziyue.filters;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -15,5 +18,11 @@ public class FiltersApiForge
 
     public void doClientStuff(final FMLClientSetupEvent event) {
         FiltersApi.LOGGER.info("Filters API initialized!");
+        FilterBuilder.registerFilter(CreativeModeTabs.COMBAT, Component.empty(), Items.FLOWER_POT::getDefaultInstance);
+        FilterBuilder.registerFilter(CreativeModeTabs.COMBAT, Component.empty(), Items.FLOWER_POT::getDefaultInstance);
+        FilterBuilder.registerFilter(CreativeModeTabs.COMBAT, Component.empty(), Items.FLOWER_POT::getDefaultInstance);
+        FilterBuilder.registerFilter(CreativeModeTabs.COMBAT, Component.empty(), Items.FLOWER_POT::getDefaultInstance);
+        FilterBuilder.registerFilter(CreativeModeTabs.COMBAT, Component.empty(), Items.FLOWER_POT::getDefaultInstance);
+        FilterBuilder.registerUncategorizedItemsFilter(CreativeModeTabs.COMBAT);
     }
 }

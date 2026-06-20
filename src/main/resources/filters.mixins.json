@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "ziyue.filters.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_21",
   "refmap": "filters.refmap.json",
   "mixins": [
   ],
