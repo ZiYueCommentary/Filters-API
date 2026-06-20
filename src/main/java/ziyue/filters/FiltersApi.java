@@ -1,6 +1,6 @@
 package ziyue.filters;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,5 +18,9 @@ public class FiltersApi
 {
     public static final String MOD_ID = "filters";
     public static final Logger LOGGER = LogManager.getLogger("Filters API");
-    public static final Identifier ICONS = new Identifier(FiltersApi.MOD_ID, "textures/gui/filters.png");
+    public static final ResourceLocation ICON_CHECK = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "check");
+    public static final ResourceLocation ICON_CROSS = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "cross");
+    public static final ResourceLocation ICON_UP = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "up");
+    public static final ResourceLocation ICON_DOWN = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "down");
+    public static final ResourceLocation ICON_WRENCH = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "wrench");
 }

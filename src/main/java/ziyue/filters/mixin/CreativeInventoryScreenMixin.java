@@ -1,19 +1,20 @@
 package ziyue.filters.mixin;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.resource.featuretoggle.FeatureSet;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.fabricmc.fabric.api.client.itemgroup.v1.FabricCreativeInventoryScreen;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.*;
 
 /**
  * Render filters.
@@ -42,34 +43,38 @@ import static ziyue.filters.FiltersApi.ICONS;
  * @since 1.0.0
  */
 
-@Mixin(CreativeInventoryScreen.class)
-public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler>
+@Mixin(CreativeModeInventoryScreen.class)
+public abstract class CreativeInventoryScreenMixin extends AbstractContainerScreen<CreativeModeInventoryScreen.ItemPickerMenu> implements FabricCreativeInventoryScreen
 {
-    @Shadow private static ItemGroup selectedTab;
+    @Shadow
+    private static CreativeModeTab selectedTab;
 
-    @Shadow @Final private Set<TagKey<Item>> searchResultTags;
+    @Shadow
+    private float scrollOffs;
 
-    @Shadow private float scrollPosition;
+    @Shadow
+    @Final
+    private Set<TagKey<Item>> visibleTags;
 
     @Unique
     private static boolean filtersAPI$itemsCategorized = false;
 
-    public CreativeInventoryScreenMixin(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
-        super(screenHandler, playerInventory, text);
+    public CreativeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu abstractContainerMenu, Inventory inventory, Component component) {
+        super(abstractContainerMenu, inventory, component);
     }
 
     @Inject(at = @At("TAIL"), method = "<init>")
-    private void afterInit(PlayerEntity player, FeatureSet enabledFeatures, boolean operatorTabEnabled, CallbackInfo ci) {
+    private void afterInit(LocalPlayer localPlayer, FeatureFlagSet featureFlagSet, boolean bl, CallbackInfo ci) {
         if (!filtersAPI$itemsCategorized) {
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
 
             // collecting uncategorized items
-            Registries.ITEM.iterator().forEachRemaining(item -> ItemGroups.getGroups().forEach(tab -> {
+            BuiltInRegistries.ITEM.iterator().forEachRemaining(item -> CreativeModeTabs.allTabs().forEach(tab -> {
                 if (FilterBuilder.isTabHasFilters(tab)) {
                     FilterList filters = FilterBuilder.FILTERS.get(tab);
                     if (filters.uncategorizedItems != null) {
-                        List<Item> items = tab.getDisplayStacks().stream().map(ItemStack::getItem).toList();
+                        List<Item> items = tab.getDisplayItems().stream().map(ItemStack::getItem).toList();
                         if (items.contains(item)) {
                             if (!FilterBuilder.isItemCategorized(tab, item)) {
                                 filters.uncategorizedItems.addItems(item);
@@ -94,7 +99,7 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     }
 
     @Inject(at = @At("HEAD"), method = "render")
-    protected void beforeRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    protected void beforeRender(GuiGraphics guiGraphics, int x, int y, float f, CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter1) -> filtersApi$showButtons(filter1, false));
         FilterBuilder.FILTERS.forEach((map, filter) -> filter.forEach(button -> button.visible = false));
 
@@ -104,8 +109,8 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
         filtersApi$showButtons(filter, true);
         for (int o = 0; o < filter.size(); o++) {
             if ((o >= filter.filterIndex) && (o < filter.filterIndex + 4)) {
-                filter.get(o).setX(this.x - 28);
-                filter.get(o).setY(this.y + 27 * (o - filter.filterIndex) + 10);
+                filter.get(o).setX(this.leftPos - 28);
+                filter.get(o).setY(this.topPos + 27 * (o - filter.filterIndex) + 10);
                 filter.get(o).visible = true;
             } else filter.get(o).visible = false;
         }
@@ -114,40 +119,44 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     }
 
     @Inject(at = @At("TAIL"), method = "render")
-    protected void afterRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    protected void afterRender(GuiGraphics context, int mouseX, int mouseY, float f, CallbackInfo ci) {
         if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
         FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
-        if (filter.btnScrollUp.isHovered()) context.drawTooltip(this.textRenderer, filter.btnScrollUp.getMessage(), mouseX, mouseY);
-        if (filter.btnScrollDown.isHovered()) context.drawTooltip(this.textRenderer, filter.btnScrollDown.getMessage(), mouseX, mouseY);
-        if (filter.btnEnableAll.isHovered()) context.drawTooltip(this.textRenderer, filter.btnEnableAll.getMessage(), mouseX, mouseY);
-        if (filter.btnDisableAll.isHovered()) context.drawTooltip(this.textRenderer, filter.btnDisableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollUp.isHovered())
+            context.renderTooltip(this.font, filter.btnScrollUp.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollDown.isHovered())
+            context.renderTooltip(this.font, filter.btnScrollDown.getMessage(), mouseX, mouseY);
+        if (filter.btnEnableAll.isHovered())
+            context.renderTooltip(this.font, filter.btnEnableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnDisableAll.isHovered())
+            context.renderTooltip(this.font, filter.btnDisableAll.getMessage(), mouseX, mouseY);
         if (filter.btnReserved != null && filter.btnReserved.isHovered() && filter.btnReservedTooltip != null) {
-            context.drawTooltip(this.textRenderer, filter.btnReservedTooltip, mouseX, mouseY);
+            context.renderTooltip(this.font, filter.btnReservedTooltip, mouseX, mouseY);
         }
 
         filter.forEach(filter1 -> {
-            if (filter1.isHovered()) context.drawTooltip(this.textRenderer, filter1.getMessage(), mouseX, mouseY);
+            if (filter1.isHovered()) context.renderTooltip(this.font, filter1.getMessage(), mouseX, mouseY);
         });
     }
 
     @Inject(at = @At("TAIL"), method = "init")
     protected void afterInit(CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter) -> {
-            filter.btnScrollUp = new IconButton(this.x - 22, this.y - 12, Text.translatable("button.filters.scroll_up").formatted(Formatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
-            filter.btnScrollDown = new IconButton(this.x - 22, this.y + 119, Text.translatable("button.filters.scroll_down").formatted(Formatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
-            filter.btnEnableAll = new IconButton(this.x - 50, this.y + 10, Text.translatable("button.filters.enable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
-            filter.btnDisableAll = new IconButton(this.x - 50, this.y + 32, Text.translatable("button.filters.disable_all").formatted(Formatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
+            filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, Component.translatable("button.filters.scroll_up").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex--, ICON_UP);
+            filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 119, Component.translatable("button.filters.scroll_down").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex++, ICON_DOWN);
+            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, Component.translatable("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICON_CHECK);
+            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, Component.translatable("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICON_CROSS);
             if (filter.btnReservedOnPress != null) {
-                filter.btnReserved = new IconButton(this.x - 50, this.y + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
-                this.addDrawableChild(filter.btnReserved);
+                filter.btnReserved = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon);
+                this.addRenderableWidget(filter.btnReserved);
             }
-            this.addDrawableChild(filter.btnScrollUp);
-            this.addDrawableChild(filter.btnScrollDown);
-            this.addDrawableChild(filter.btnEnableAll);
-            this.addDrawableChild(filter.btnDisableAll);
+            this.addRenderableWidget(filter.btnScrollUp);
+            this.addRenderableWidget(filter.btnScrollDown);
+            this.addRenderableWidget(filter.btnEnableAll);
+            this.addRenderableWidget(filter.btnDisableAll);
 
-            filter.forEach(this::addDrawableChild);
+            filter.forEach(this::addRenderableWidget);
         });
     }
 
@@ -173,19 +182,18 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
 
     @Unique
     protected void filtersApi$updateItems() {
-        searchResultTags.clear();
-        this.handler.itemList.clear(); // clear the tab
+        visibleTags.clear();
+        this.menu.items.clear(); // clear the tab
         FilterBuilder.FILTERS.get(selectedTab).forEach(
                 filter -> {
                     if (filter.enabled) {
-                        filter.items.forEach(item -> this.handler.itemList.add(new ItemStack(item))); // add items
+                        filter.items.forEach(item -> this.menu.items.add(new ItemStack(item))); // add items
                     }
                 }
         );
-        this.handler.itemList.sort(Comparator.comparingInt(o -> Item.getRawId(o.getItem()))); // sort items
-        float previousOffset = this.scrollPosition;
-        this.handler.scrollItems(0.0f); // refresh (maybe?)
-        this.scrollPosition = previousOffset;
-        this.handler.scrollItems(previousOffset);
+        this.menu.items.sort(Comparator.comparingInt(o -> Item.getId(o.getItem()))); // sort items
+//        float previousOffset = this.scrollOffs;
+//        this.scrollOffs = previousOffset;
+        this.menu.scrollTo(this.scrollOffs);
     }
 }
