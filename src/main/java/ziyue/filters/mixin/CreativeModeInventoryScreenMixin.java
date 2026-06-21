@@ -148,7 +148,7 @@ public abstract class CreativeModeInventoryScreenMixin extends AbstractContainer
             this.addRenderableWidget(filter.btnEnableAll);
             this.addRenderableWidget(filter.btnDisableAll);
 
-            filter.forEach(this::addRenderableWidget);
+            filter.forEach(filter1 -> this.addRenderableWidget(filter1));
         });
     }
 
