@@ -26,7 +26,6 @@ public class FilterList extends ArrayList<Filter>
     public Button.OnPress btnReservedOnPress = null;
     public Component btnReservedTooltip = null;
     public ResourceLocation btnReservedIcon = null;
-    public int btnReservedIconU = 0, btnReservedIconV = 0;
 
     /**
      * Creating an empty filter.

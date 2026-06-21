@@ -2,8 +2,8 @@ package ziyue.filters.mixin;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -21,10 +21,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import ziyue.filters.Filter;
-import ziyue.filters.FilterBuilder;
-import ziyue.filters.FilterList;
-import ziyue.filters.FiltersApi;
+import ziyue.filters.*;
 import ziyue.filters.gui.IconButton;
 
 import java.util.Comparator;
@@ -32,7 +29,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.*;
 
 /**
  * Render filters.
@@ -43,7 +40,7 @@ import static ziyue.filters.FiltersApi.ICONS;
  */
 
 @Mixin(CreativeModeInventoryScreen.class)
-public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingInventoryScreen<CreativeModeInventoryScreen.ItemPickerMenu>
+public abstract class CreativeModeInventoryScreenMixin extends AbstractContainerScreen<CreativeModeInventoryScreen.ItemPickerMenu>
 {
     @Shadow
     private static CreativeModeTab selectedTab;
@@ -55,12 +52,12 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     @Unique
     private static boolean filters$itemsCategorized = false;
 
-    public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu p_98701_, Inventory p_98702_, Component p_98703_) {
-        super(p_98701_, p_98702_, p_98703_);
+    public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu menu, Inventory playerInventory, Component title) {
+        super(menu, playerInventory, title);
     }
 
     @Inject(at = @At("TAIL"), method = "<init>")
-    protected void afterInit(LocalPlayer p_346290_, FeatureFlagSet p_260074_, boolean p_259569_, CallbackInfo ci) {
+    protected void afterConstruct(LocalPlayer player, FeatureFlagSet enabledFeatures, boolean displayOperatorCreativeTab, CallbackInfo ci) {
         if (!filters$itemsCategorized) {
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
@@ -140,12 +137,12 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     @Inject(at = @At("TAIL"), method = "init")
     protected void afterInit(CallbackInfo ci) {
         FilterBuilder.FILTERS.forEach((map, filter) -> {
-            filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, Component.translatable("button.filters.scroll_up").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex--, ICONS, 0, 0);
-            filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 119, Component.translatable("button.filters.scroll_down").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex++, ICONS, 16, 0);
-            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, Component.translatable("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICONS, 32, 0);
-            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, Component.translatable("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICONS, 48, 0);
+            filter.btnScrollUp = new IconButton(this.leftPos - 22, this.topPos - 12, Component.translatable("button.filters.scroll_up").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex--, ICON_UP);
+            filter.btnScrollDown = new IconButton(this.leftPos - 22, this.topPos + 119, Component.translatable("button.filters.scroll_down").withStyle(ChatFormatting.WHITE), button -> filter.filterIndex++, ICON_DOWN);
+            filter.btnEnableAll = new IconButton(this.leftPos - 50, this.topPos + 10, Component.translatable("button.filters.enable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = true), ICON_CHECK);
+            filter.btnDisableAll = new IconButton(this.leftPos - 50, this.topPos + 32, Component.translatable("button.filters.disable_all").withStyle(ChatFormatting.WHITE), button -> FilterBuilder.FILTERS.get(selectedTab).forEach(filter1 -> filter1.enabled = false), ICON_CROSS);
             if (filter.btnReservedOnPress != null) {
-                filter.btnReserved = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon, filter.btnReservedIconU, filter.btnReservedIconV);
+                filter.btnReserved = new IconButton(this.leftPos - 50, this.topPos + 54, filter.btnReservedTooltip, filter.btnReservedOnPress, filter.btnReservedIcon);
                 this.addRenderableWidget(filter.btnReserved);
             }
             this.addRenderableWidget(filter.btnScrollUp);
@@ -153,12 +150,12 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             this.addRenderableWidget(filter.btnEnableAll);
             this.addRenderableWidget(filter.btnDisableAll);
 
-            filter.forEach(this::addRenderableWidget);
+            filter.forEach(filter1 -> this.addRenderableWidget(filter1)); // don't replace it or the game will crash
         });
     }
 
     @Unique
-    protected void filtersApi$showButtons(FilterList list, boolean visible) {
+    public void filtersApi$showButtons(FilterList list, boolean visible) {
         if (list.size() > 4) {
             list.btnScrollUp.visible = visible;
             list.btnScrollDown.visible = visible;
@@ -178,8 +175,8 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     }
 
     @Unique
-    protected void filtersApi$updateItems() {
-        visibleTags.clear();
+    public void filtersApi$updateItems() {
+        this.visibleTags.clear();
         this.menu.items.clear(); // clear the tab
         FilterBuilder.FILTERS.get(selectedTab).forEach(
                 filter -> {

@@ -8,7 +8,7 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 displayURL="https://modrinth.com/project/filters-api"
-logoFile="logo.png"
+logoFile= "logo.png"
 authors="${mod_authors}"
 description='''${mod_description}'''
 [[mixins]]
@@ -17,7 +17,7 @@ config="filters.mixins.json"
 [[dependencies."${mod_id}"]]
 modId="neoforge"
 type="required"
-versionRange="${neo_version_range}"
+versionRange="[${neo_version},)"
 ordering="NONE"
 side="CLIENT"
 [[dependencies."${mod_id}"]]

@@ -36,7 +36,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static Filter registerFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
-        return FilterBuilder.registerFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
+        return FilterBuilder.registerFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), filterName, filterIcon);
     }
 
     /**
@@ -64,7 +64,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab) {
-        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value());
     }
 
     /**
@@ -87,7 +87,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Supplier<ItemStack> filterIcon) {
-        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterIcon);
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), filterIcon);
     }
 
     /**
@@ -110,7 +110,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
-        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
+        return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), filterName, filterIcon);
     }
 
     /**
@@ -139,26 +139,26 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress) {
-        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, FiltersApi.ICONS, 64, 0);
+        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), tooltip, onPress, FiltersApi.ICON_WRENCH);
     }
 
     /**
      * @author ZiYueCommentary
-     * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation, int, int)
+     * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation)
      * @since 1.0.0
      */
     public static void setReservedButton(CreativeModeTab creativeModeTab, Component tooltip, Button.OnPress onPress) {
-        FilterBuilder.setReservedButton(creativeModeTab, tooltip, onPress, FiltersApi.ICONS, 64, 0);
+        FilterBuilder.setReservedButton(creativeModeTab, tooltip, onPress, FiltersApi.ICON_WRENCH);
     }
 
     /**
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
-     * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation, int, int)
+     * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation)
      * @since 1.0.0+1.20.1
      */
-    public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon, int iconU, int iconV) {
-        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, icon, iconU, iconV);
+    public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon) {
+        FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), tooltip, onPress, icon);
     }
 
     /**
@@ -171,13 +171,11 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @since 1.0.0
      */
-    public static void setReservedButton(CreativeModeTab creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon, int iconU, int iconV) {
+    public static void setReservedButton(CreativeModeTab creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon) {
         FilterList filters = FilterBuilder.FILTERS.get(creativeModeTab);
         filters.btnReservedTooltip = tooltip;
         filters.btnReservedOnPress = onPress;
         filters.btnReservedIcon = icon;
-        filters.btnReservedIconU = iconU;
-        filters.btnReservedIconV = iconV;
     }
 
     /**
@@ -187,7 +185,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static void filtersVisibility(ResourceKey<CreativeModeTab> creativeModeTab, boolean visible) {
-        FilterBuilder.filtersVisibility(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), visible);
+        FilterBuilder.filtersVisibility(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), visible);
     }
 
     /**
@@ -210,7 +208,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static boolean isItemCategorized(ResourceKey<CreativeModeTab> creativeModeTab, Item item) {
-        return FilterBuilder.isItemCategorized(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), item);
+        return FilterBuilder.isItemCategorized(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value(), item);
     }
 
     /**
@@ -236,7 +234,7 @@ public class FilterBuilder
      * @since 1.0.0+1.20.1
      */
     public static boolean isTabHasFilters(ResourceKey<CreativeModeTab> creativeModeTab) {
-        return FilterBuilder.isTabHasFilters(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));
+        return FilterBuilder.isTabHasFilters(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab).get().value());
     }
 
     /**
