@@ -1,0 +1,8 @@
+{
+    "modmenu.descriptionTranslation.filters": "Egy könyvtár ami kategorizáló rendszert ad a modja kreatív lapjához.",
+    "button.filters.scroll_up": "Görgessen felfelé",
+    "button.filters.scroll_down": "Görgessen lefelé",
+    "button.filters.enable_all": "Összes filter engedélyezése",
+    "button.filters.disable_all": "Összes filter tiltása",
+    "filter.filters.uncategorized": "Kategorizálatlan"
+}

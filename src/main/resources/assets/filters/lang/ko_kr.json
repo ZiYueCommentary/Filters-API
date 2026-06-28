@@ -1,0 +1,8 @@
+{
+    "modmenu.descriptionTranslation.filters": "모드의 크리에이티브 탭을 분류할 수 있는 필터링 시스템을 제공하는 라이브러리입니다.",
+    "button.filters.scroll_up": "위로 스크롤",
+    "button.filters.scroll_down": "아래로 스크롤",
+    "button.filters.enable_all": "모든 필터 활성화",
+    "button.filters.disable_all": "모든 필터 비활성화",
+    "filter.filters.uncategorized": "분류되지 않음"
+}

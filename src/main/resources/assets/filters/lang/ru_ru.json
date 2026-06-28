@@ -1,0 +1,8 @@
+{
+    "modmenu.descriptionTranslation.filters": "Библиотека, которая предоставляет систему фильтрации для категоризации вкладки творчества вашего мода.",
+    "button.filters.scroll_up": "Вверх",
+    "button.filters.scroll_down": "Вниз",
+    "button.filters.enable_all": "Включить Все Фильтры",
+    "button.filters.disable_all": "Выключить Все Фильтры",
+    "filter.filters.uncategorized": "Без категории"
+}

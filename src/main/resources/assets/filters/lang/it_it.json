@@ -1,0 +1,8 @@
+{
+    "button.filters.scroll_up": "Scorri sopra",
+    "button.filters.scroll_down": "Scorri sotto",
+    "button.filters.enable_all": "Abilita tutti i filtri",
+    "button.filters.disable_all": "Disabilita tutti i filtri",
+    "filter.filters.uncategorized": "Nessuna categoria",
+    "modmenu.descriptionTranslation.filters": ".Una Libreria che fornisce un sistema di filtri per posizionare in modo ordinato il Tab della Creativa nella tua Mod."
+}

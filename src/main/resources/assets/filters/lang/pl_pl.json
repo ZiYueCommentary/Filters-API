@@ -1,0 +1,8 @@
+{
+    "button.filters.scroll_up": "Przewiń w górę",
+    "button.filters.scroll_down": "Przewiń w dół",
+    "button.filters.enable_all": "Włącz wszystkie filtry",
+    "button.filters.disable_all": "Wyłącz wszystkie filtry",
+    "filter.filters.uncategorized": "Nieskategoryzowane",
+    "modmenu.descriptionTranslation.filters": "Biblioteka zapewniająca system filtrowania porządkujący twoje zakładki trybu kreatywnego."
+}
