@@ -104,17 +104,18 @@ publishing {
             artifactId = archives_base_name + "-neoforge"
             version = mod_version + "+" + minecraft_version
             from components.java
+
+            pom.withXml {
+                def dependenciesNode = asNode().get('dependencies')
+                if (dependenciesNode) {
+                    dependenciesNode*.parent()*.remove(dependenciesNode)
+                }
+            }
         }
     }
 
     repositories {
-        maven {
-            url = "https://maven.ziyuesinicization.site/releases/"
-            credentials {
-                username = "ZiYueCommentary"
-                password = System.getenv("MAVEN_PASS")
-            }
-        }
+        mavenLocal()
     }}
 
 tasks.withType(JavaCompile).configureEach {

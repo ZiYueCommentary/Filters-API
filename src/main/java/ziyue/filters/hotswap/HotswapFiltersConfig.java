@@ -45,7 +45,7 @@ public class HotswapFiltersConfig
             for (PendingFilter pendingFilter : pendingTab.getValue()) {
                 List<Item> buildItems = new ArrayList<>();
                 for (ResourceLocation itemLocation : pendingFilter.items()) {
-                    final var item = BuiltInRegistries.ITEM.get(itemLocation);
+                    final var item = BuiltInRegistries.ITEM.getHolder(itemLocation);
                     if (item.isEmpty()) {
                         LOGGER.warn("Item {} not found at filter {}, tab {}", itemLocation, pendingFilter.id(), tabId);
                         continue;
@@ -53,13 +53,13 @@ public class HotswapFiltersConfig
                     buildItems.add(item.get().value());
                 }
                 filters.add(new Filter(pendingFilter.title(), () -> {
-                    final var icon = BuiltInRegistries.ITEM.get(pendingFilter.icon());
+                    final var icon = BuiltInRegistries.ITEM.getHolder(pendingFilter.icon());
                     return icon.map(itemReference -> new ItemStack(itemReference.value())).orElseGet(() -> new ItemStack(Items.BARRIER));
                 }, buildItems));
             }
             if (pendingTab.getValue().uncategorized != null) {
                 filters.uncategorizedItems = new Filter(pendingTab.getValue().uncategorized.title(), () -> {
-                    final var icon = BuiltInRegistries.ITEM.get(pendingTab.getValue().uncategorized.icon());
+                    final var icon = BuiltInRegistries.ITEM.getHolder(pendingTab.getValue().uncategorized.icon());
                     return icon.map(itemReference -> new ItemStack(itemReference.value())).orElseGet(() -> new ItemStack(Items.BARRIER));
                 }, new ArrayList<>());
             }

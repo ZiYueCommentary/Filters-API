@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.itemsCategorized;
 
 /**
  * Render filters.
@@ -149,7 +150,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             this.addRenderableWidget(filter.btnEnableAll);
             this.addRenderableWidget(filter.btnDisableAll);
 
-            filter.forEach(this::addRenderableWidget);
+            filter.forEach(filter1 -> this.addRenderableWidget(filter1));
         });
     }
 
