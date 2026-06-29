@@ -10,10 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,10 +20,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ziyue.filters.*;
 import ziyue.filters.gui.IconButton;
+import ziyue.filters.hotswap.HotswapFiltersConfig;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ziyue.filters.FiltersApi.*;
@@ -49,8 +45,6 @@ public abstract class CreativeModeInventoryScreenMixin extends AbstractContainer
     private Set<TagKey<Item>> visibleTags;
     @Shadow
     private float scrollOffs;
-    @Unique
-    private static boolean filters$itemsCategorized = false;
 
     public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -58,7 +52,9 @@ public abstract class CreativeModeInventoryScreenMixin extends AbstractContainer
 
     @Inject(at = @At("TAIL"), method = "<init>")
     protected void afterConstruct(LocalPlayer player, FeatureFlagSet enabledFeatures, boolean displayOperatorCreativeTab, CallbackInfo ci) {
-        if (!filters$itemsCategorized) {
+        if (!itemsCategorized) {
+            HotswapFiltersConfig.getReady();
+
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
 
@@ -88,7 +84,7 @@ public abstract class CreativeModeInventoryScreenMixin extends AbstractContainer
 
             FiltersApi.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
 
-            filters$itemsCategorized = true;
+            itemsCategorized = true;
         }
     }
 

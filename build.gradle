@@ -74,7 +74,7 @@ afterEvaluate {
     }
     copy {
         from "temp_lang/filters-api/en_us-json/"
-        into "/"
+        into "./"
     }
     delete("lang.zip", "temp_lang")
 }

@@ -23,4 +23,5 @@ public class FiltersApi
     public static final ResourceLocation ICON_UP = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "up");
     public static final ResourceLocation ICON_DOWN = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "down");
     public static final ResourceLocation ICON_WRENCH = ResourceLocation.fromNamespaceAndPath(FiltersApi.MOD_ID, "wrench");
+    public static boolean itemsCategorized = false;
 }
