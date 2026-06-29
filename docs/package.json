@@ -6,8 +6,5 @@
   },
   "dependencies": {
     "vitepress": "^2.0.0-alpha.17"
-  },
-  "devDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.62.2"
   }
 }
