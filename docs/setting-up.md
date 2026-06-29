@@ -5,8 +5,10 @@ Replace **VERSION_ID** with the version of Filters API desired, and **MC_ID** wi
 :::
 
 ::: danger
-Do not wrap FIlters API into your mods.
+Do not wrap Filters API into your mods.
 :::
+
+When you need to use advanced features, you have to include Filters API as a dependency of your project.
 
 ## Fabric/Quilt
 

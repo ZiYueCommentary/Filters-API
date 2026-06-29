@@ -26,6 +26,14 @@ export default defineConfig({
                             {text: 'Adding items', link: '/legacy/adding'},
                             {text: 'Registering uncategorized filter', link: '/legacy/uncategorized'},
                         ]
+                    },
+                    {
+                        text: 'Unsupported',
+                        link: '/legacy/unsupported/',
+                        items: [
+                            {text: 'Sorting filters', link: '/legacy/unsupported/sorting'},
+                            {text: 'Removing filters', link: '/legacy/unsupported/removing'}
+                        ]
                     }
                 ]
             },
@@ -39,13 +47,15 @@ export default defineConfig({
                         text: 'Using Filters API',
                         items:
                             [
-                                {text: 'Setting up', link: '/setting-up'}
+                                {text: 'Registering filters', link: '/registering'},
+                                {text: 'Uncategorized filters', link: '/uncategorized'},
                             ]
                     },
                     {
                         text: 'Advanced',
                         items:
                             [
+                                {text: 'Setting up', link: '/setting-up'},
                                 {text: 'Configuring reserved button', link: '/reserved-button'},
                                 {text: 'Disabling filters', link: '/disabling'},
                             ]
