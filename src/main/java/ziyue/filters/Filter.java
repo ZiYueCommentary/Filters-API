@@ -36,7 +36,7 @@ public class Filter extends ButtonWidget
     public final List<Item> items;
     public boolean enabled = true;
 
-    protected Filter(Text tooltip, Supplier<ItemStack> icon, List<Item> items) {
+    public Filter(Text tooltip, Supplier<ItemStack> icon, List<Item> items) {
         super(0, 0, 32, 26, tooltip, ButtonWidget::onPress, DEFAULT_NARRATION_SUPPLIER);
         this.icon = icon;
         this.items = items;
@@ -62,7 +62,7 @@ public class Filter extends ButtonWidget
         this.drawRotatedTexture(matrices.peek().getPositionMatrix(), this.getX(), this.getY(), textureX, textureY, width);
 
         ItemRenderer renderer = MinecraftClient.getInstance().getItemRenderer();
-        renderer.renderGuiItemIcon(matrices, icon.get(), this.getX() + 8, this.getY() + 4);
+        renderer.renderGuiItemIcon(matrices, icon.get(), this.getX() + 8, this.getY() + 5);
     }
 
 

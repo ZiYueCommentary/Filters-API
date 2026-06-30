@@ -26,13 +26,13 @@ import ziyue.filters.FilterBuilder;
 import ziyue.filters.FilterList;
 import ziyue.filters.FiltersApi;
 import ziyue.filters.gui.IconButton;
+import ziyue.filters.hotswap.HotswapFiltersConfig;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.itemsCategorized;
 
 /**
  * Render filters.
@@ -51,16 +51,15 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
 
     @Shadow private float scrollPosition;
 
-    @Unique
-    private static boolean filtersAPI$itemsCategorized = false;
-
     public CreativeInventoryScreenMixin(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
         super(screenHandler, playerInventory, text);
     }
 
     @Inject(at = @At("TAIL"), method = "<init>")
     private void afterInit(PlayerEntity player, FeatureSet enabledFeatures, boolean operatorTabEnabled, CallbackInfo ci) {
-        if (!filtersAPI$itemsCategorized) {
+        if (!itemsCategorized) {
+            HotswapFiltersConfig.getReady();
+            
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
 
@@ -89,7 +88,8 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
             });
 
             FiltersApi.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
-            filtersAPI$itemsCategorized = true;
+
+            itemsCategorized = true;
         }
     }
 

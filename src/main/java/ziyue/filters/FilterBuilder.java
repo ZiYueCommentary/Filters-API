@@ -22,6 +22,7 @@ public class FilterBuilder
 {
     /**
      * The core of Filters API - the hashmap which stores all filters.
+     * This field stores configs that are checked as valid, and ready to use.
      *
      * @since 1.0.0
      */
@@ -36,7 +37,10 @@ public class FilterBuilder
      * @return Filter instance
      * @author ZiYueCommentary
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerFilter(ItemGroup creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -49,7 +53,10 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab) {
         Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -62,7 +69,10 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -81,7 +91,10 @@ public class FilterBuilder
      * @return Filter instance
      * @author ZiYueCommentary
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
