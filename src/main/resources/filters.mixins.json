@@ -8,7 +8,6 @@
 		"defaultRequire": 1
 	},
 	"client": [
-		"CreativeInventoryScreenMixin",
-		"FinishInitializationMixin"
+		"CreativeInventoryScreenMixin"
 	]
 }

@@ -3,12 +3,15 @@ package ziyue.filters.mixin;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,12 +22,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ziyue.filters.Filter;
 import ziyue.filters.FilterBuilder;
 import ziyue.filters.FilterList;
+import ziyue.filters.FiltersApi;
 import ziyue.filters.gui.IconButton;
+import ziyue.filters.hotswap.HotswapFiltersConfig;
 
 import java.util.Comparator;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.itemsCategorized;
 
 /**
  * Render filters.
@@ -46,6 +53,42 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
     public CreativeInventoryScreenMixin(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
         super(screenHandler, playerInventory, text);
     }
+
+     @Inject(at = @At("TAIL"), method = "<init>")
+     private void afterInit(PlayerEntity player, CallbackInfo ci) {
+         if (!itemsCategorized) {
+             HotswapFiltersConfig.getReady();
+
+             AtomicInteger uncategorizedItems = new AtomicInteger(0);
+             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
+
+             // collecting uncategorized items
+             Registry.ITEM.forEach(item -> {
+                 ItemGroup itemGroup = item.getGroup();
+                 if (itemGroup != null) {
+                     if (FilterBuilder.isTabHasFilters(itemGroup)) {
+                         FilterList filters = FilterBuilder.FILTERS.get(itemGroup.getIndex());
+                         if ((filters.uncategorizedItems != null) && (!FilterBuilder.isItemCategorized(itemGroup, item))) {
+                             filters.uncategorizedItems.addItems(item);
+                             uncategorizedItems.getAndIncrement();
+                         }
+                     }
+                 }
+             });
+
+             // adding uncategorized items filter to filter list
+             FilterBuilder.FILTERS.forEach((tabId, filterList) -> {
+                 if ((filterList.uncategorizedItems != null) && (!filterList.uncategorizedItems.items.isEmpty())) {
+                     filterList.add(filterList.uncategorizedItems);
+                     uncategorizedFilters.getAndIncrement();
+                 }
+             });
+
+             FiltersApi.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
+
+             itemsCategorized = true;
+         }
+     }
 
     @Inject(at = @At("HEAD"), method = "render")
     protected void beforeRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
