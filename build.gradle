@@ -37,7 +37,7 @@ tasks.withType(JavaCompile).configureEach {
 
 java {
 	withSourcesJar()
-    withJavadocJar()
+//    withJavadocJar()
 
 	sourceCompatibility = JavaVersion.VERSION_16
 	targetCompatibility = JavaVersion.VERSION_16
@@ -60,7 +60,7 @@ afterEvaluate {
     }
     copy {
         from "temp_lang/filters-api/en_us-json/"
-        into "."
+        into "./"
     }
     delete("lang.zip", "temp_lang")
 }
@@ -86,12 +86,6 @@ publishing {
     }
 
 	repositories {
-        maven {
-            url = "https://maven.ziyuesinicization.site/releases/"
-            credentials {
-                username = "ZiYueCommentary"
-                password = System.getenv("MAVEN_PASS")
-            }
-        }
+        mavenLocal()
 	}
 }
