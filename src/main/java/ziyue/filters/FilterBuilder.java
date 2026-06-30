@@ -25,6 +25,7 @@ public class FilterBuilder
 {
     /**
      * The core of Filters API - the hashmap which stores all filters.
+     * This field stores configs that are checked as valid, and ready to use.
      *
      * @since 1.0.0
      */
@@ -34,8 +35,12 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerFilter(CreativeModeTab, Component, Supplier)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+
+    @Deprecated(since = "1.1.0")
     public static Filter registerFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
         return FilterBuilder.registerFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
     }
@@ -49,7 +54,10 @@ public class FilterBuilder
      * @return Filter instance
      * @author ZiYueCommentary
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerFilter(CreativeModeTab creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -62,8 +70,11 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(CreativeModeTab)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab) {
         return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));
     }
@@ -72,7 +83,10 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(CreativeModeTab creativeModeTab) {
         Filter filter = new Filter(Component.translatable("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -85,8 +99,11 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(CreativeModeTab, Supplier)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Supplier<ItemStack> filterIcon) {
         return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterIcon);
     }
@@ -95,7 +112,10 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(CreativeModeTab creativeModeTab, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(Component.translatable("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -108,8 +128,11 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(CreativeModeTab, Component, Supplier)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ResourceKey<CreativeModeTab> creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
         return FilterBuilder.registerUncategorizedItemsFilter(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), filterName, filterIcon);
     }
@@ -124,7 +147,10 @@ public class FilterBuilder
      * @return Filter instance
      * @author ZiYueCommentary
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(CreativeModeTab creativeModeTab, Component filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -137,7 +163,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
      */
     public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress) {
         FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, FiltersApi.ICONS, 64, 0);
@@ -156,7 +182,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #setReservedButton(CreativeModeTab, Component, Button.OnPress, ResourceLocation, int, int)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
      */
     public static void setReservedButton(ResourceKey<CreativeModeTab> creativeModeTab, Component tooltip, Button.OnPress onPress, ResourceLocation icon, int iconU, int iconV) {
         FilterBuilder.setReservedButton(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), tooltip, onPress, icon, iconU, iconV);
@@ -185,7 +211,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #filtersVisibility(CreativeModeTab, boolean)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
      */
     public static void filtersVisibility(ResourceKey<CreativeModeTab> creativeModeTab, boolean visible) {
         FilterBuilder.filtersVisibility(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), visible);
@@ -208,7 +234,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #isItemCategorized(CreativeModeTab, Item)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
      */
     public static boolean isItemCategorized(ResourceKey<CreativeModeTab> creativeModeTab, Item item) {
         return FilterBuilder.isItemCategorized(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab), item);
@@ -234,7 +260,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #isTabHasFilters(CreativeModeTab)
-     * @since 1.0.0+1.20.1
+     * @since 1.0.0
      */
     public static boolean isTabHasFilters(ResourceKey<CreativeModeTab> creativeModeTab) {
         return FilterBuilder.isTabHasFilters(BuiltInRegistries.CREATIVE_MODE_TAB.get(creativeModeTab));

@@ -2,7 +2,6 @@ package ziyue.filters.mixin;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,10 +10,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,13 +23,13 @@ import ziyue.filters.FilterBuilder;
 import ziyue.filters.FilterList;
 import ziyue.filters.FiltersApi;
 import ziyue.filters.gui.IconButton;
+import ziyue.filters.hotswap.HotswapFiltersConfig;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ziyue.filters.FiltersApi.ICONS;
+import static ziyue.filters.FiltersApi.itemsCategorized;
 
 /**
  * Render filters.
@@ -53,16 +49,16 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
     private Set<TagKey<Item>> visibleTags;
     @Shadow
     private float scrollOffs;
-    @Unique
-    private static boolean filters$itemsCategorized = false;
 
     public CreativeModeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu p_98701_, Inventory p_98702_, Component p_98703_) {
         super(p_98701_, p_98702_, p_98703_);
     }
 
     @Inject(at = @At("TAIL"), method = "<init>")
-    protected void afterInit(Player p_259788_, FeatureFlagSet p_260074_, boolean p_259569_, CallbackInfo ci) {
-        if (!filters$itemsCategorized) {
+    protected void afterConstruct(Player p_259788_, FeatureFlagSet p_260074_, boolean p_259569_, CallbackInfo ci) {
+        if (!itemsCategorized) {
+            HotswapFiltersConfig.getReady();
+
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
 
@@ -92,7 +88,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
 
             FiltersApi.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
 
-            filters$itemsCategorized = true;
+            itemsCategorized = true;
         }
     }
 
@@ -154,7 +150,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             this.addRenderableWidget(filter.btnEnableAll);
             this.addRenderableWidget(filter.btnDisableAll);
 
-            filter.forEach(this::addRenderableWidget);
+            filter.forEach(filter1 -> this.addRenderableWidget(filter1));
         });
     }
 

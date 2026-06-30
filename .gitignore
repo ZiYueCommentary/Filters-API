@@ -119,3 +119,4 @@ run/
 
 **/lang/*.json
 !en_us.json
+docs
