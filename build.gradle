@@ -59,7 +59,7 @@ afterEvaluate {
     }
     copy {
         from "temp_lang/filters-api/en_us-json/"
-        into "."
+        into "./"
     }
     delete("lang.zip", "temp_lang")
 }
@@ -70,16 +70,17 @@ publishing {
 			artifactId = project.archives_base_name + "-fabric"
             version = project.mod_version + "+" + project.minecraft_version
 			from components.java
+
+            pom.withXml {
+                def dependenciesNode = asNode().get('dependencies')
+                if (dependenciesNode) {
+                    dependenciesNode*.parent()*.remove(dependenciesNode)
+                }
+            }
 		}
 	}
 
 	repositories {
-        maven {
-            url = "https://maven.ziyuesinicization.site/releases/"
-            credentials {
-                username = "ZiYueCommentary"
-                password = System.getenv("MAVEN_PASS")
-            }
-        }
+        mavenLocal()
 	}
 }
