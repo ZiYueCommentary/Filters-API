@@ -38,7 +38,7 @@ public class Filter extends ButtonWidget
     public final List<Item> items;
     public boolean enabled = true;
 
-    protected Filter(Text tooltip, Supplier<ItemStack> icon, List<Item> items) {
+    public Filter(Text tooltip, Supplier<ItemStack> icon, List<Item> items) {
         super(0, 0, 32, 26, tooltip, ButtonWidget::onPress, DEFAULT_NARRATION_SUPPLIER);
         this.icon = icon;
         this.items = items;
