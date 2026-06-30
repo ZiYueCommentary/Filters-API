@@ -28,10 +28,6 @@ public class IconButton extends ButtonWidget
 
     @Override
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
         context.drawGuiTexture(TEXTURES.get(this.active, this.hovered), this.getX(), this.getY(), this.width, this.height);
         context.drawGuiTexture(this.iconResource, this.getX() + 2, this.getY() + 2, 16, 16);
     }

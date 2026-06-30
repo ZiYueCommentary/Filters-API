@@ -23,4 +23,5 @@ public class FiltersApi
     public static final Identifier ICON_UP = Identifier.of(FiltersApi.MOD_ID, "up");
     public static final Identifier ICON_DOWN = Identifier.of(FiltersApi.MOD_ID, "down");
     public static final Identifier ICON_WRENCH = Identifier.of(FiltersApi.MOD_ID, "wrench");
+    public static boolean itemsCategorized = false;
 }

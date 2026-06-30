@@ -26,10 +26,9 @@ import ziyue.filters.FilterBuilder;
 import ziyue.filters.FilterList;
 import ziyue.filters.FiltersApi;
 import ziyue.filters.gui.IconButton;
+import ziyue.filters.hotswap.HotswapFiltersConfig;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ziyue.filters.FiltersApi.*;
@@ -45,11 +44,13 @@ import static ziyue.filters.FiltersApi.*;
 @Mixin(CreativeInventoryScreen.class)
 public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScreen<CreativeInventoryScreen.CreativeScreenHandler>
 {
-    @Shadow private static ItemGroup selectedTab;
-    @Shadow @Final private Set<TagKey<Item>> searchResultTags;
-    @Shadow private float scrollPosition;
-    @Unique
-    private static boolean filtersAPI$itemsCategorized = false;
+    @Shadow
+    private static ItemGroup selectedTab;
+    @Shadow
+    @Final
+    private Set<TagKey<Item>> searchResultTags;
+    @Shadow
+    private float scrollPosition;
 
     public CreativeInventoryScreenMixin(CreativeInventoryScreen.CreativeScreenHandler screenHandler, PlayerInventory playerInventory, Text text) {
         super(screenHandler, playerInventory, text);
@@ -57,7 +58,9 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
 
     @Inject(at = @At("TAIL"), method = "<init>")
     private void afterInit(ClientPlayerEntity player, FeatureSet enabledFeatures, boolean operatorTabEnabled, CallbackInfo ci) {
-        if (!filtersAPI$itemsCategorized) {
+        if (!itemsCategorized) {
+            HotswapFiltersConfig.getReady();
+
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
 
@@ -86,7 +89,8 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
             });
 
             FiltersApi.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
-            filtersAPI$itemsCategorized = true;
+
+            itemsCategorized = true;
         }
     }
 
@@ -115,10 +119,14 @@ public abstract class CreativeInventoryScreenMixin extends AbstractInventoryScre
         if (!FilterBuilder.isTabHasFilters(selectedTab)) return;
 
         FilterList filter = FilterBuilder.FILTERS.get(selectedTab);
-        if (filter.btnScrollUp.isHovered()) context.drawTooltip(this.textRenderer, filter.btnScrollUp.getMessage(), mouseX, mouseY);
-        if (filter.btnScrollDown.isHovered()) context.drawTooltip(this.textRenderer, filter.btnScrollDown.getMessage(), mouseX, mouseY);
-        if (filter.btnEnableAll.isHovered()) context.drawTooltip(this.textRenderer, filter.btnEnableAll.getMessage(), mouseX, mouseY);
-        if (filter.btnDisableAll.isHovered()) context.drawTooltip(this.textRenderer, filter.btnDisableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollUp.isHovered())
+            context.drawTooltip(this.textRenderer, filter.btnScrollUp.getMessage(), mouseX, mouseY);
+        if (filter.btnScrollDown.isHovered())
+            context.drawTooltip(this.textRenderer, filter.btnScrollDown.getMessage(), mouseX, mouseY);
+        if (filter.btnEnableAll.isHovered())
+            context.drawTooltip(this.textRenderer, filter.btnEnableAll.getMessage(), mouseX, mouseY);
+        if (filter.btnDisableAll.isHovered())
+            context.drawTooltip(this.textRenderer, filter.btnDisableAll.getMessage(), mouseX, mouseY);
         if (filter.btnReserved != null && filter.btnReserved.isHovered() && filter.btnReservedTooltip != null) {
             context.drawTooltip(this.textRenderer, filter.btnReservedTooltip, mouseX, mouseY);
         }

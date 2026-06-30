@@ -26,6 +26,7 @@ public class FilterBuilder
 {
     /**
      * The core of Filters API - the hashmap which stores all filters.
+     * This field stores configs that are checked as valid, and ready to use.
      *
      * @since 1.0.0
      */
@@ -35,8 +36,11 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerFilter(ItemGroup, Text, Supplier)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerFilter(RegistryKey<ItemGroup> creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         return FilterBuilder.registerFilter(Registries.ITEM_GROUP.get(creativeModeTab), filterName, filterIcon);
     }
@@ -50,7 +54,10 @@ public class FilterBuilder
      * @return Filter instance
      * @author ZiYueCommentary
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerFilter(ItemGroup creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -63,8 +70,11 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(RegistryKey<ItemGroup> creativeModeTab) {
         return FilterBuilder.registerUncategorizedItemsFilter(Registries.ITEM_GROUP.get(creativeModeTab));
     }
@@ -73,7 +83,10 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab) {
         Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), () -> new ItemStack(Blocks.BARRIER), new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -86,8 +99,11 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Supplier)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(RegistryKey<ItemGroup> creativeModeTab, Supplier<ItemStack> filterIcon) {
         return FilterBuilder.registerUncategorizedItemsFilter(Registries.ITEM_GROUP.get(creativeModeTab), filterIcon);
     }
@@ -96,7 +112,10 @@ public class FilterBuilder
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(Text.translatable("filter.filters.uncategorized"), filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -109,8 +128,11 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #registerUncategorizedItemsFilter(ItemGroup, Text, Supplier)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(RegistryKey<ItemGroup> creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         return FilterBuilder.registerUncategorizedItemsFilter(Registries.ITEM_GROUP.get(creativeModeTab), filterName, filterIcon);
     }
@@ -125,7 +147,10 @@ public class FilterBuilder
      * @return Filter instance
      * @author ZiYueCommentary
      * @since 1.0.0
+     * @deprecated This function belongs to the legacy implementation and replaced by modern JSON one.
+     * Please check the website documentation.
      */
+    @Deprecated(since = "1.1.0")
     public static Filter registerUncategorizedItemsFilter(ItemGroup creativeModeTab, Text filterName, Supplier<ItemStack> filterIcon) {
         Filter filter = new Filter(filterName, filterIcon, new ArrayList<>());
         FilterList filterList = FILTERS.getOrDefault(creativeModeTab, FilterList.empty());
@@ -138,7 +163,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #setReservedButton(ItemGroup, Text, ButtonWidget.PressAction)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
      */
     public static void setReservedButton(RegistryKey<ItemGroup> creativeModeTab, Text tooltip, ButtonWidget.PressAction onPress) {
         FilterBuilder.setReservedButton(Registries.ITEM_GROUP.get(creativeModeTab), tooltip, onPress, ICON_WRENCH);
@@ -157,7 +182,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #setReservedButton(ItemGroup, Text, ButtonWidget.PressAction, Identifier)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
      */
     public static void setReservedButton(RegistryKey<ItemGroup> creativeModeTab, Text tooltip, ButtonWidget.PressAction onPress, Identifier icon) {
         FilterBuilder.setReservedButton(Registries.ITEM_GROUP.get(creativeModeTab), tooltip, onPress, icon);
@@ -184,7 +209,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #filtersVisibility(ItemGroup, boolean)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
      */
     public static void filtersVisibility(RegistryKey<ItemGroup> creativeModeTab, boolean visible) {
         FilterBuilder.filtersVisibility(Registries.ITEM_GROUP.get(creativeModeTab), visible);
@@ -207,7 +232,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #isItemCategorized(ItemGroup, Item)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
      */
     public static boolean isItemCategorized(RegistryKey<ItemGroup> creativeModeTab, Item item) {
         return FilterBuilder.isItemCategorized(Registries.ITEM_GROUP.get(creativeModeTab), item);
@@ -233,7 +258,7 @@ public class FilterBuilder
      * @param creativeModeTab specific vanilla creative mode tab
      * @author ZiYueCommentary
      * @see #isTabHasFilters(ItemGroup)
-     * @since 1.0.0+1.20.6
+     * @since 1.0.0
      */
     public static boolean isTabHasFilters(RegistryKey<ItemGroup> creativeModeTab) {
         return FilterBuilder.isTabHasFilters(Registries.ITEM_GROUP.get(creativeModeTab));

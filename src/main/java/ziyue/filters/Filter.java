@@ -13,6 +13,7 @@ import ziyue.filters.mixin.CreativeInventoryScreenMixin;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
@@ -35,7 +36,7 @@ public class Filter extends ButtonWidget
     public final List<Item> items;
     public boolean enabled = true;
 
-    protected Filter(Text tooltip, Supplier<ItemStack> icon, List<Item> items) {
+    public Filter(Text tooltip, Supplier<ItemStack> icon, List<Item> items) {
         super(0, 0, 32, 26, tooltip, ButtonWidget::onPress, DEFAULT_NARRATION_SUPPLIER);
         this.icon = icon;
         this.items = items;
