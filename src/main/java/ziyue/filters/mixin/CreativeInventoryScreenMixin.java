@@ -11,10 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,10 +24,9 @@ import ziyue.filters.FilterBuilder;
 import ziyue.filters.FilterList;
 import ziyue.filters.FiltersApi;
 import ziyue.filters.gui.IconButton;
+import ziyue.filters.hotswap.HotswapFiltersConfig;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ziyue.filters.FiltersApi.*;
@@ -56,16 +52,15 @@ public abstract class CreativeInventoryScreenMixin extends AbstractContainerScre
     @Final
     private Set<TagKey<Item>> visibleTags;
 
-    @Unique
-    private static boolean filtersAPI$itemsCategorized = false;
-
     public CreativeInventoryScreenMixin(CreativeModeInventoryScreen.ItemPickerMenu abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
     }
 
     @Inject(at = @At("TAIL"), method = "<init>")
     private void afterInit(LocalPlayer localPlayer, FeatureFlagSet featureFlagSet, boolean bl, CallbackInfo ci) {
-        if (!filtersAPI$itemsCategorized) {
+        if (!itemsCategorized) {
+            HotswapFiltersConfig.getReady();
+            
             AtomicInteger uncategorizedItems = new AtomicInteger(0);
             AtomicInteger uncategorizedFilters = new AtomicInteger(0);
 
@@ -94,7 +89,8 @@ public abstract class CreativeInventoryScreenMixin extends AbstractContainerScre
             });
 
             FiltersApi.LOGGER.info("Found {} uncategorized items, added {} filters to the filter lists", uncategorizedItems.get(), uncategorizedFilters.get());
-            filtersAPI$itemsCategorized = true;
+
+            itemsCategorized = true;
         }
     }
 

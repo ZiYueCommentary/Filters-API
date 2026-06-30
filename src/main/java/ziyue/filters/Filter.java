@@ -16,6 +16,7 @@ import ziyue.filters.mixin.CreativeInventoryScreenMixin;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
@@ -38,8 +39,8 @@ public class Filter extends Button
     public final List<Item> items;
     public boolean enabled = true;
 
-    protected Filter(Component tooltip, Supplier<ItemStack> icon, List<Item> items) {
-        super(0, 0, 32, 26, tooltip, Button::onPress, DEFAULT_NARRATION);
+    public Filter(Component title, Supplier<ItemStack> icon, List<Item> items) {
+        super(0, 0, 32, 26, title, Button::onPress, DEFAULT_NARRATION);
         this.icon = icon;
         this.items = items;
     }

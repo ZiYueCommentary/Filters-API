@@ -59,21 +59,9 @@ afterEvaluate {
     }
     copy {
         from "temp_lang/filters-api/en_us-json/"
-        into "."
+        into "./"
     }
     delete("lang.zip", "temp_lang")
-}
-
-tasks.register('printGroup') {
-    doLast { println project.group }
-}
-
-tasks.register('printArtifact') {
-    doLast { println(project.archives_base_name + "-fabric") }
-}
-
-tasks.register('printVersion') {
-    doLast { println(project.mod_version + "+" + project.minecraft_version) }
 }
 
 publishing {
