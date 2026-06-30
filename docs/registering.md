@@ -1,5 +1,9 @@
 # Registering filters
 
+::: tip
+This page introduces the modern implementation, which is available since `1.1.0`. If the Minecraft version which you want does not supported, please use [Legacy implementation](/legacy).
+:::
+
 To register filters, create config at `assets/filters/filters.json`.
 
 ```json

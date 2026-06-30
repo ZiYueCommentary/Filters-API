@@ -15,28 +15,6 @@ export default defineConfig({
         "logo": "/logo.png",
 
         sidebar: {
-            '/legacy/': {
-                base: '',
-                items: [
-                    {
-                        text: 'Legacy',
-                        link: '/legacy/',
-                        items: [
-                            {text: 'Registering filters', link: '/legacy/registering'},
-                            {text: 'Adding items', link: '/legacy/adding'},
-                            {text: 'Registering uncategorized filter', link: '/legacy/uncategorized'},
-                        ]
-                    },
-                    {
-                        text: 'Unsupported',
-                        link: '/legacy/unsupported/',
-                        items: [
-                            {text: 'Sorting filters', link: '/legacy/unsupported/sorting'},
-                            {text: 'Removing filters', link: '/legacy/unsupported/removing'}
-                        ]
-                    }
-                ]
-            },
             '/': {
                 base: '',
                 items: [
@@ -59,6 +37,16 @@ export default defineConfig({
                                 {text: 'Configuring reserved button', link: '/reserved-button'},
                                 {text: 'Disabling filters', link: '/disabling'},
                             ]
+                    },
+                    {
+                        text: 'Legacy',
+                        link: '/legacy/',
+                        collapsed: true,
+                        items: [
+                            {text: 'Registering filters', link: '/legacy/registering'},
+                            {text: 'Adding items', link: '/legacy/adding'},
+                            {text: 'Registering uncategorized filter', link: '/legacy/uncategorized'},
+                        ]
                     }
                 ]
             }

@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "Filters API"
-  text: "Documentation"
+  text: "Wiki"
   tagline: Provides a filtering system to creative mode tabs.
   image:
     src: /logo.png
