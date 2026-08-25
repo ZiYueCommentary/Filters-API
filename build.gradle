@@ -148,6 +148,13 @@ publishing {
             artifactId = project.archives_base_name + "-forge"
             version = project.mod_version + "+" + project.minecraft_version
             from components.java
+
+            pom.withXml {
+                def dependenciesNode = asNode().get('dependencies')
+                if (dependenciesNode) {
+                    dependenciesNode*.parent()*.remove(dependenciesNode)
+                }
+            }
         }
     }
 
