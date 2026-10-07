@@ -1,1 +1,8 @@
-{}
+{
+    "modmenu.descriptionTranslation.filters": "Eine Library, die ein Filter-System zur Kategorisierung innerhalb des Kreativ-Tabs deiner Mod hinzufügt.",
+    "button.filters.scroll_up": "Hochscrollen",
+    "button.filters.scroll_down": "Runterscrollen",
+    "button.filters.enable_all": "Schalte alle Filter an",
+    "button.filters.disable_all": "Schalte alle Filter aus",
+    "filter.filters.uncategorized": "Nicht Kategorisiert"
+}
